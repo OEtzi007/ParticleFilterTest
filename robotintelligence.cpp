@@ -9,6 +9,7 @@
 
 #include <random>
 #include "constants.h"
+#include "map.h"
 
 RobotIntelligence::RobotIntelligence() {
 	// TODO Auto-generated constructor stub
@@ -34,16 +35,16 @@ void RobotIntelligence::run() {
 }
 
 void RobotIntelligence::evalSensors() {
-	for(int i=0; i<NUM_PARTICLES; i++) {
+	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 
 	}
 }
 
 void RobotIntelligence::initParticles() {
-	for(int i=0; i<NUM_PARTICLES; i++) {
+	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle;
-		curParticle.x=random()*Map::width;
-		curParticle.y=random()*Map::heigth;
+		curParticle.x=random()*Map::width+Map::origin.getX();
+		curParticle.y=random()*Map::height+Map::origin.getY();
 		curParticle.ori=random()*2*PI;
 		curParticle.weight=1;
 		particles.push_back(curParticle);

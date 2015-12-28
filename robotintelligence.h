@@ -29,7 +29,7 @@ private:
 
 	void run();
 	void initParticles();
-	void readSensors();
+	std::vector<double> readSensors() const;
 	void evalSensors();
 	void resampling();
 	void estimatePosition();

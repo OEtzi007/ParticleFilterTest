@@ -4,3 +4,7 @@ MapObject::MapObject()
 {
 
 }
+
+MapObject::~MapObject()
+{
+}

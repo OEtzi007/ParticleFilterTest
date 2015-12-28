@@ -10,7 +10,7 @@
 
 #include "mapobject.h"
 
-#include "coordinate.h";
+#include "coordinate.h"
 
 class Line: public MapObject {
 private:

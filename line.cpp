@@ -9,10 +9,7 @@
 
 #include "laser.h"
 
-Line::Line(const Coordinate &start, const Coordinate &end) {
-	// TODO Auto-generated constructor stub
-	this->start = start;
-	this->end = end;
+Line::Line(const Coordinate &start, const Coordinate &end):start(start), end(end) {
 }
 
 Line::~Line() {

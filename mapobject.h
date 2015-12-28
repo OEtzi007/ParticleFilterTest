@@ -7,6 +7,7 @@ class MapObject
 {
 public:
 	MapObject();
+	virtual ~MapObject();
 	virtual double evalLaser(const Laser&) const = 0;
 };
 

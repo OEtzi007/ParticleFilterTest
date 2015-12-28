@@ -10,6 +10,10 @@
 
 #include <vector>
 
+#include "lasersensorinterface.h"
+#include "motoractuatorinterface.h"
+#include "timeinterface.h"
+
 struct Particle{
 	double x, y;
 	double ori;
@@ -19,7 +23,7 @@ struct Particle{
 class RobotIntelligence {
 private:
 	LaserSensorInterface laserData;
-	MotorInterface motorData;
+	MotorActuatorInterface motorData;
 	TimeInterface timeData;
 	std::vector<Particle> particles;
 

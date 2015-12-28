@@ -10,7 +10,7 @@ private:
 	Coordinate origin;
 	Vector direction;	//normed to length 1
 public:
-	static double range;
+	static const double range;
 
 	Laser(const Coordinate& origin, const Vector& direction);
 

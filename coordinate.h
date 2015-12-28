@@ -9,7 +9,10 @@ protected:
 	double x;
 	double y;
 public:
-	Coordinate(double, double);
+	Coordinate(const double&, const double&);
+
+	double getX() const;
+	double getY() const;
 
 friend Vector operator-(const Coordinate&, const Coordinate&);
 };

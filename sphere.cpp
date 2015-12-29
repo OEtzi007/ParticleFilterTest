@@ -3,13 +3,13 @@
 #include <cmath>
 #include "laser.h"
 
-Sphere::Sphere(const Coordinate& origin, const double& radius):origin(origin),radius(radius)
+Sphere::Sphere(CoordinateSystem * const base, const Coordinate& origin, const double& radius):Object(CoordinateSystem(base,origin,Vector(1.,0.,0.),Vector(0.,1.,0.))),radius(radius)
 {
 
 }
 
 double Sphere::evalLaser(const Laser& laser) const{
-	Vector toOrigin=origin-laser.getOrigin();
+	Vector toOrigin=base-laser.getOrigin();
 	double k=(toOrigin*laser.getDirection());
 	double dist=(toOrigin-k*laser.getDirection()).length();
 	if(dist>radius)

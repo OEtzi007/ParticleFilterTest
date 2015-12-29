@@ -8,16 +8,16 @@
 #ifndef LINE_H_
 #define LINE_H_
 
-#include "mapobject.h"
+#include "object.h"
 
 #include "coordinate.h"
 
-class Line: public MapObject {
+class Line: public Object {
 private:
 	Coordinate start;
 	Coordinate end;
 public:
-	Line(const Coordinate&, const Coordinate&);
+	Line(CoordinateSystem* const, const Coordinate&, const Coordinate&);
 	virtual ~Line();
 	double evalLaser(const Laser&) const;
 };

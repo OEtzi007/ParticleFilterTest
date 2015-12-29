@@ -1,9 +1,11 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "world.h"
+
 #include "coordinate.h"
 
-class Map
+class Map : public World
 {
 public:
 	static const Coordinate origin;

@@ -9,7 +9,7 @@
 
 #include "laser.h"
 
-Line::Line(const Coordinate &start, const Coordinate &end):start(start), end(end) {
+Line::Line(CoordinateSystem* const base, const Coordinate &start, const Coordinate &end):Object(CoordinateSystem(base,start,end-start)),start(start), end(end) {
 }
 
 Line::~Line() {

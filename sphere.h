@@ -1,16 +1,14 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "mapobject.h"
+#include "object.h"
 #include "coordinate.h"
 
-class Sphere : public MapObject
+class Sphere : public Object
 {
-private:
-	Coordinate origin;
 	double radius;
 public:
-	Sphere(const Coordinate&, const double&);
+	Sphere(CoordinateSystem* const, const Coordinate&, const double&);
 
 	double evalLaser(const Laser&) const;
 };

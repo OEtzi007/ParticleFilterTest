@@ -1,14 +1,17 @@
 #include "coordinatesystem.h"
 
-CoordinateSystem::CoordinateSystem(const CoordinateSystem * const base, Coordinate origin, const Vector &xAxis, const Vector &yAxis): Coordinate(origin.transform(base)),axis{Vector(base),Vector(base),Vector(base)}
+CoordinateSystem::CoordinateSystem(const CoordinateSystem * const base, Coordinate origin, Vector xAxis, Vector yAxis): Coordinate(origin.transform(base)),axis{Vector(base),Vector(base),Vector(base)}
 {
+	xAxis.transform(base);
+	yAxis.transform(base);
 	axis[0]=xAxis/xAxis.length();
 	axis[2]=cross(xAxis,yAxis);
 	axis[2]=axis[2]/axis[2].length();
 	axis[1]=cross(axis[2],axis[0]);
 }
 
-CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, const Coordinate& origin, const Vector&xAxis): Coordinate(origin),axis{Vector(base),Vector(base),Vector(base)}{
+CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin, Vector xAxis): Coordinate(origin.transform(base)),axis{Vector(base),Vector(base),Vector(base)}{
+	xAxis.transform(base);
 	axis[0]=xAxis/xAxis.length();
 	if(xAxis.z){
 		double x=0,y=-1,z;
@@ -22,7 +25,7 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, const Coo
 	axis[1]=cross(axis[2],axis[0]);
 }
 
-CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, const Coordinate& origin): Coordinate(origin), axis{Vector(base),Vector(base),Vector(base)}
+CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin): Coordinate(origin.transform(base)), axis{Vector(base),Vector(base),Vector(base)}
 {
 	//TODO
 }

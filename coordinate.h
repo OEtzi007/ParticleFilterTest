@@ -16,7 +16,7 @@ public:
 	Coordinate(const CoordinateSystem* const, const double& x=0, const double& y=0, const double& z=0);
 	//Coordinate& operator=(const Coordinate&); TODO remove
 
-	Coordinate& transform(const CoordinateSystem* const); //TODO and add different transform for vector
+	Coordinate& transform(const CoordinateSystem* const); //TODO and add different transform for vector and cooSystem
 
 	const CoordinateSystem* getBase() const;
 

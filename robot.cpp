@@ -8,7 +8,7 @@
 
 Robot::Robot(CoordinateSystem* const base, const Coordinate & origin, const double &radius, const std::string &laserConfigFile):Sphere(base,origin,radius)
 {
-	std::ifstream lcfg(laserConfigFile);
+    std::ifstream lcfg(laserConfigFile);
 	int n;
 	lcfg >> n;
 	for(int i=0;i<n;i++){

@@ -20,8 +20,16 @@ RobotIntelligence::~RobotIntelligence() {
 
 void RobotIntelligence::run() {
 	initParticles();
+    double lastTime = timeData.getTime();
+    unsigned int lastMeasurementId = laserData.getMeasurementId()-1;
 	while(true) { //TODO
-		moveParticles();
+        if(lastMeasurementId == laserData.getMeasurementId())
+            continue;
+
+        lastMeasurementId = laserData.getMeasurementId();
+        double timeStep = timeData.getTime()-lastTime;
+        lastTime = timeData.getTime();
+        moveParticles(timeStep);
 		evalSensors();
 		resampling();
 
@@ -69,7 +77,7 @@ void RobotIntelligence::estimatePosition() { //TODO rethink function, highestWei
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		if (particles.at(i).weight > highestWeight) {
 			highestWeight = particles.at(i).weight;
-			bestParticle = particles.at(i).weight;
+			bestParticle = particles.at(i);
 		}
 	}
 }
@@ -78,8 +86,23 @@ void RobotIntelligence::move() {
 
 }
 
-void RobotIntelligence::moveParticles() {
-
+void RobotIntelligence::moveParticles(double timeStep) {
+    std::normal_distribution<double> v_x(motorData.getVelocity().getX(), MotorActuatorInterface::relSigmaV*motorData.getVelocity().getX());
+    std::normal_distribution<double> v_y(motorData.getVelocity().getY(), MotorActuatorInterface::relSigmaV*motorData.getVelocity().getY());
+    std::normal_distribution<double> omega(motorData.getOmega(), MotorActuatorInterface::sigmaOmega);
+    std::default_random_engine re;
+    for(int i=0; i<NUM_PARTICLES; i++) {
+        Particle &curParticle = particles[i];
+        double s_x = v_x(re)*timeStep;
+        double s_y = v_y(re)*timeStep;
+        double delx=cos(curParticle.ori)*s_x;
+        double dely=sin(curParticle.ori)*s_x;
+        delx-=sin(curParticle.ori)*s_y;
+        dely+=cos(curParticle.ori)*s_y;
+        curParticle.x+=delx;
+        curParticle.y+=dely;
+        curParticle.ori=(curParticle.ori+omega(re)*timeStep) %(2*PI);
+    }
 }
 
 void RobotIntelligence::initParticles() {

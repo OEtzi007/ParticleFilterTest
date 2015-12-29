@@ -34,7 +34,7 @@ private:
 	void resampling();
 	void estimatePosition();
 	void move();
-	void moveParticles();
+    void moveParticles(double);
 	double random();
 	double random(double, double);
 public:

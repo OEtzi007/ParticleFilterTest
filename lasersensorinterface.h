@@ -11,6 +11,7 @@ public:
 	LaserSensorInterface();
 
 	std::vector<double> getSensorData() const;
+    unsigned int getMeasurementId() const;
 };
 
 #endif // LASERSENSORINTERFACE_H

@@ -4,3 +4,6 @@ TimeInterface::TimeInterface()
 {
 
 }
+
+double TimeInterface::getTime() const{ //TODO
+}

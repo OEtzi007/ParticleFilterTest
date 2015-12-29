@@ -1,4 +1,5 @@
 #include "lasersensorinterface.h"
+#include "constants.h"
 
 const double LaserSensorInterface::relSigmaL = REL_SIGMA_L;
 

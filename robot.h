@@ -6,7 +6,7 @@
 #include <vector>
 #include "constants.h"
 
-class LaserSensor;
+#include "lasersensor.h"
 
 class Robot : public Sphere
 {
@@ -14,6 +14,7 @@ private:
 	std::vector<LaserSensor> laserSensors;
 public:
 	Robot(CoordinateSystem* const, const Coordinate&, const double& radius=ROBOT_RADIUS, const std::string& laserConfigFile=LASER_CONFIG_FILE);
+    Robot(double, double, double); //TODO
 
     std::vector<double> getDistances() const; //TODO Abstände von LaserSensoren zurückgeben
 };

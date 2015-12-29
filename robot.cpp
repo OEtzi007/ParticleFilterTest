@@ -20,3 +20,7 @@ Robot::Robot(CoordinateSystem* const base, const Coordinate & origin, const doub
 		laserSensors.push_back(LaserSensor(CoordinateSystem(&this->base,laserOrigin,direction)));
 	}
 }
+
+Robot::Robot(double x, double y, double ori) { //TODO Roboter auf Position (x|y) mit Ausrichtung ori
+
+}

@@ -47,7 +47,7 @@ void RobotIntelligence::evalSensors() {
 	std::vector<double> sensorData = readSensors();
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
         Particle &curParticle = particles.at(i);
-        myFriend = new Robot(curParticle.x, curParticle.y, curParticle.ori); //TODO Konstruktor implementieren
+        myFriend = Robot(curParticle.x, curParticle.y, curParticle.ori); //TODO Konstruktor implementieren
         std::vector<double> particleDistances = myFriend.getDistances();
         for(unsigned int j=0; j<sensorData.size(); j++) {
             curParticle.weight *= gaussian(sensorData[j], particleDistances[j], LaserSensorInterface::relSigmaL*particleDistances[j]);
@@ -107,7 +107,10 @@ void RobotIntelligence::moveParticles(double timeStep) {
         dely+=cos(curParticle.ori)*s_y;
         curParticle.x+=delx;
         curParticle.y+=dely;
-        curParticle.ori=(curParticle.ori+omega(re)*timeStep) %(2*PI);
+        curParticle.ori=curParticle.ori+omega(re)*timeStep;
+        while(curParticle.ori >= 2*PI) { //modulo function for double's
+            curParticle.ori -= 2*PI;
+        }
     }
 }
 
@@ -139,7 +142,7 @@ double RobotIntelligence::random(double lower_bound, double upper_bound) {
 double RobotIntelligence::gaussian(double x, double mean, double sigma) {
     if(sigma == 0)
         return x==mean ? 1 : 0;
-    expNumerator = -std::pow(2, x-mean);
-    expDenominator = 2* std::pow(2, sigma);
+    double expNumerator = -std::pow(2, x-mean);
+    double expDenominator = 2* std::pow(2, sigma);
     return std::exp(expNumerator/expDenominator)/(sigma*std::sqrt(2*PI));
 }

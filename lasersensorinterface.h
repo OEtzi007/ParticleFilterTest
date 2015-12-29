@@ -2,7 +2,6 @@
 #define LASERSENSORINTERFACE_H
 
 #include "interface.h"
-#include "constants.h"
 
 #include <vector>
 

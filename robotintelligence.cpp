@@ -21,14 +21,12 @@ RobotIntelligence::~RobotIntelligence() {
 void RobotIntelligence::run() {
 	initParticles();
 	while(true) { //TODO
-		std::vector<double> sensorData = readSensors();
-		evalSensors(sensorData);
+		moveParticles();
+		evalSensors();
 		resampling();
 
 		estimatePosition();
 		move();
-
-		moveParticles();
 	}
 }
 
@@ -36,7 +34,8 @@ std::vector<double> RobotIntelligence::readSensors() {
 	return std::vector<double>(laserData.getSensorData()); //TODO wird Kopie angelegt?
 }
 
-void RobotIntelligence::evalSensors(std::vector<double> sensorData) {
+void RobotIntelligence::evalSensors() {
+	std::vector<double> sensorData = readSensors();
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle = particles.at(i);
 	}
@@ -64,8 +63,15 @@ void RobotIntelligence::resampling() {
 	particles = newParticles;
 }
 
-void RobotIntelligence::estimatePosition() {
-
+void RobotIntelligence::estimatePosition() { //TODO rethink function, highestWeight best approximation?
+	double highestWeight = 0;
+	Particle bestParticle; // after for-loop this represents the robot's most likely position
+	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
+		if (particles.at(i).weight > highestWeight) {
+			highestWeight = particles.at(i).weight;
+			bestParticle = particles.at(i).weight;
+		}
+	}
 }
 
 void RobotIntelligence::move() {

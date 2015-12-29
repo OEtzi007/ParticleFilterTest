@@ -30,7 +30,7 @@ private:
 	void run();
 	void initParticles();
 	std::vector<double> readSensors();
-	void evalSensors(std::vector<double>);
+	void evalSensors();
 	void resampling();
 	void estimatePosition();
 	void move();

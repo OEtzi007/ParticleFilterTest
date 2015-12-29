@@ -16,6 +16,9 @@ RobotIntelligence::RobotIntelligence() {
 
 }
 
+RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorInterface &motorData, TimeInterface &timeData):laserData(laserData), motorData(motorData), timeData(timeData) {
+}
+
 RobotIntelligence::~RobotIntelligence() {
 	// TODO Auto-generated destructor stub
 }
@@ -24,7 +27,7 @@ void RobotIntelligence::run() {
 	initParticles();
 	while(true) {
 		std::vector<double> sensorData = readSensors();
-		evalSensors();
+		evalSensors(sensorData);
 		resampling();
 
 		estimatePosition();
@@ -34,10 +37,31 @@ void RobotIntelligence::run() {
 	}
 }
 
-void RobotIntelligence::evalSensors() {
+std::vector<double> RobotIntelligence::readSensors() {
+	return std::vector<double>(laserData.getSensorData()); //TODO wird Kopie angelegt?
+}
+
+void RobotIntelligence::evalSensors(std::vector<double> sensorData) {
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
+		Particle curParticle = particles.at(i);
 
 	}
+}
+
+void RobotIntelligence::resampling() {
+
+}
+
+void RobotIntelligence::estimatePosition() {
+
+}
+
+void RobotIntelligence::move() {
+
+}
+
+void RobotIntelligence::moveParticles() {
+
 }
 
 void RobotIntelligence::initParticles() {

@@ -22,15 +22,15 @@ struct Particle{
 
 class RobotIntelligence {
 private:
-	LaserSensorInterface laserData;
-	MotorActuatorInterface motorData;
-	TimeInterface timeData;
+	LaserSensorInterface &laserData;
+	MotorActuatorInterface &motorData;
+	TimeInterface &timeData;
 	std::vector<Particle> particles;
 
 	void run();
 	void initParticles();
-	std::vector<double> readSensors() const;
-	void evalSensors();
+	std::vector<double> readSensors();
+	void evalSensors(std::vector<double>);
 	void resampling();
 	void estimatePosition();
 	void move();
@@ -38,6 +38,7 @@ private:
 	double random();
 public:
 	RobotIntelligence();
+	RobotIntelligence(LaserSensorInterface&, MotorInterface&, TimeInterface&);
 	virtual ~RobotIntelligence();
 	void startRobot();
 	void stopRobot();

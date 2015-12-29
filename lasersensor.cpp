@@ -2,7 +2,7 @@
 
 #include "laser.h"
 
-LaserSensor::LaserSensor(const CoordinateSystem &base):Object(base)
+LaserSensor::LaserSensor(CoordinateSystem* const base, const Coordinate& origin, const Vector& direction):Object(CoordinateSystem(base,origin,direction))
 {
 
 }

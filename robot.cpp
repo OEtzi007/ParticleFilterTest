@@ -15,8 +15,8 @@ Robot::Robot(CoordinateSystem* const base, const Coordinate & origin, const doub
 		double phi;
 		lcfg >> phi;
 		phi*=2*PI/360.;
-		Vector direction(cos(phi),sin(phi));
+		Vector direction(&(this->base),cos(phi),sin(phi));
 		Coordinate laserOrigin=direction*radius;
-		laserSensors.push_back(LaserSensor(CoordinateSystem(&this->base,laserOrigin,direction)));
+		laserSensors.push_back(LaserSensor(&(this->base),laserOrigin,direction));
 	}
 }

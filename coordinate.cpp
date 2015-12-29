@@ -2,19 +2,23 @@
 
 #include "vector.h"
 
-Coordinate::Coordinate(const double &x, const double &y, const double &z):x(x),y(y),z(z)
+Coordinate::Coordinate(CoordinateSystem* const base, const double &x, const double &y, const double &z):base(base),x(x),y(y),z(z)
 {
-
 }
-
-Coordinate::Coordinate(const double &x, const double &y):x(x),y(y),z(0)
+/*TODO remove
+Coordinate& Coordinate::operator=(const Coordinate& coo)
 {
-
+	if(coo.base==this->base){
+		this->x=coo.x;
+		this->y=coo.y;
+		this->z=coo.z;
+	return *this;
 }
+*/
 
-Coordinate::Coordinate():x(0),y(0),z(0)
+CoordinateSystem* Coordinate::getBase() const
 {
-
+	return base;
 }
 
 double Coordinate::getX() const
@@ -32,6 +36,7 @@ double Coordinate::getZ() const
 	return z;
 }
 
-Vector operator-(const Coordinate& a, const Coordinate& b){
-	return Vector(a.x-b.x,a.y-b.y,a.z-b.z);
+Vector operator-(Coordinate a, const Coordinate& b){
+	a.transform(b.base);
+	return Vector(b.base,a.x-b.x,a.y-b.y,a.z-b.z);
 }

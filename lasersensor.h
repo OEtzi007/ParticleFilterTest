@@ -8,7 +8,7 @@
 class LaserSensor : public Object
 {
 public:
-	LaserSensor(const CoordinateSystem&);
+	LaserSensor(CoordinateSystem* const, const Coordinate&, const Vector&);
 
 	double evalLaser(const Laser&) const;
 };

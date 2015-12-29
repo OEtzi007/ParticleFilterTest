@@ -18,6 +18,7 @@ public:
 	friend Vector operator*(const Vector&, const double&);
 	friend Vector operator/(const Vector&, const double&);
 	friend double operator*(const Vector&, const Vector&);
+	friend Vector cross(const Vector&, const Vector&);
 };
 
 #endif // VECTOR_H

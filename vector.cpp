@@ -46,3 +46,7 @@ Vector operator/(const Vector& vec, const double& s)
 double operator*(const Vector& u, const Vector& v){
 	return u.x*v.x+u.y*v.y+u.z*v.z;
 }
+
+Vector cross(const Vector& a, const Vector& b){
+	return Vector(a.y*b.z-a.z*b.y,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x);
+}

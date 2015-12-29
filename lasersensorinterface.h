@@ -2,12 +2,15 @@
 #define LASERSENSORINTERFACE_H
 
 #include "interface.h"
+#include "constants.h"
 
 #include <vector>
 
 class LaserSensorInterface : public Interface
 {
 public:
+    static const double relSigmaL;
+
 	LaserSensorInterface();
 
 	std::vector<double> getSensorData() const;

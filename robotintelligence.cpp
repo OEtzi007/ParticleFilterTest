@@ -12,6 +12,7 @@
 #include "map.h"
 
 RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorActuatorInterface &motorData, TimeInterface &timeData):laserData(laserData), motorData(motorData), timeData(timeData) {
+    myFriend = new Robot();
 }
 
 RobotIntelligence::~RobotIntelligence() {
@@ -45,7 +46,12 @@ std::vector<double> RobotIntelligence::readSensors() {
 void RobotIntelligence::evalSensors() {
 	std::vector<double> sensorData = readSensors();
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
-		Particle curParticle = particles.at(i);
+        Particle &curParticle = particles.at(i);
+        myFriend = new Robot(curParticle.x, curParticle.y, curParticle.ori); //TODO Konstruktor implementieren
+        std::vector<double> particleDistances = myFriend.getDistances();
+        for(unsigned int j=0; j<sensorData.size(); j++) {
+            curParticle.weight *= gaussian(sensorData[j], particleDistances[j], LaserSensorInterface::relSigmaL*particleDistances[j]);
+        }
 	}
 }
 
@@ -128,4 +134,12 @@ double RobotIntelligence::random(double lower_bound, double upper_bound) {
 	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
 	std::default_random_engine re;
 	return unif(re);
+}
+
+double RobotIntelligence::gaussian(double x, double mean, double sigma) {
+    if(sigma == 0)
+        return x==mean ? 1 : 0;
+    expNumerator = -std::pow(2, x-mean);
+    expDenominator = 2* std::pow(2, sigma);
+    return std::exp(expNumerator/expDenominator)/(sigma*std::sqrt(2*PI));
 }

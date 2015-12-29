@@ -1,5 +1,7 @@
 #include "lasersensorinterface.h"
 
+const double LaserSensorInterface::relSigmaL = REL_SIGMA_L;
+
 LaserSensorInterface::LaserSensorInterface()
 {
 

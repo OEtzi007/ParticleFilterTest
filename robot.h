@@ -14,6 +14,8 @@ private:
 	std::vector<LaserSensor> laserSensors;
 public:
 	Robot(CoordinateSystem* const, const Coordinate&, const double& radius=ROBOT_RADIUS, const std::string& laserConfigFile=LASER_CONFIG_FILE);
+
+    std::vector<double> getDistances() const; //TODO Abstände von LaserSensoren zurückgeben
 };
 
 #endif // ROBOT_H

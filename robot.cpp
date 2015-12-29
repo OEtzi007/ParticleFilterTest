@@ -6,7 +6,7 @@
 #include "vector.h"
 #include "lasersensor.h"
 
-Robot::Robot(CoordinateSystem* const base, const Coordinate & origin, const double &radius, const std::string &laserConfigFile):Sphere(base,origin,radius)
+Robot::Robot(const CoordinateSystem* const base, const Coordinate & origin, const double &radius, const std::string &laserConfigFile):Sphere(base,origin,radius)
 {
 	std::ifstream lcfg(laserConfigFile);
 	int n;

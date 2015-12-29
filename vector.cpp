@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-Vector::Vector(CoordinateSystem* const base, const double &x, const double &y, const double &z):Coordinate(base,x,y,z)
+Vector::Vector(const CoordinateSystem* const base, const double &x, const double &y, const double &z):Coordinate(base,x,y,z)
 {
 }
 

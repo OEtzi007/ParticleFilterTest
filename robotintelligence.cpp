@@ -79,8 +79,8 @@ void RobotIntelligence::moveParticles() {
 void RobotIntelligence::initParticles() {
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle;
-		curParticle.x=random()*Map::width+Map::origin.getX();
-		curParticle.y=random()*Map::height+Map::origin.getY();
+		curParticle.x=random()*Map::width+Map::origin.x;
+		curParticle.y=random()*Map::height+Map::origin.y;
 		curParticle.ori=random()*2*PI;
 		curParticle.weight=1;
 		particles.push_back(curParticle);

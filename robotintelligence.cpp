@@ -11,12 +11,7 @@
 #include "constants.h"
 #include "map.h"
 
-RobotIntelligence::RobotIntelligence() {
-	// TODO Auto-generated constructor stub
-
-}
-
-RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorInterface &motorData, TimeInterface &timeData):laserData(laserData), motorData(motorData), timeData(timeData) {
+RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorActuatorInterface &motorData, TimeInterface &timeData):laserData(laserData), motorData(motorData), timeData(timeData) {
 }
 
 RobotIntelligence::~RobotIntelligence() {
@@ -25,7 +20,7 @@ RobotIntelligence::~RobotIntelligence() {
 
 void RobotIntelligence::run() {
 	initParticles();
-	while(true) {
+	while(true) { //TODO
 		std::vector<double> sensorData = readSensors();
 		evalSensors(sensorData);
 		resampling();
@@ -44,12 +39,29 @@ std::vector<double> RobotIntelligence::readSensors() {
 void RobotIntelligence::evalSensors(std::vector<double> sensorData) {
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle = particles.at(i);
-
 	}
 }
 
 void RobotIntelligence::resampling() {
+	double totalWeight=0;
+	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
+		totalWeight += particles.at(i).weight;
+	}
 
+	std::vector<Particle> newParticles;
+	for(unsigned int i=0; i<NUM_PARTICLES; i++) {  //one new Particle per loop
+		double curRand = random(0.0, totalWeight); //Random number between 0 and totalWeight to determine the copied Particle
+		double curWeight = 0;
+		for(unsigned int j=0; j<NUM_PARTICLES; j++) { //check for every Particle if it should copy
+			curWeight += particles.at(j).weight;
+			if(curRand <= curWeight) {
+				newParticles.push_back(Particle(particles.at(j))); //TODO wird kopiert oder referenz uebergeben?
+				newParticles.at(newParticles.size()).weight = 1;
+				break;
+			}
+		}
+	}
+	particles = newParticles;
 }
 
 void RobotIntelligence::estimatePosition() {
@@ -81,4 +93,10 @@ double RobotIntelligence::random() {
 	   std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
 	   std::default_random_engine re;
 	   return unif(re);
+}
+
+double RobotIntelligence::random(double lower_bound, double upper_bound) {
+	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
+	std::default_random_engine re;
+	return unif(re);
 }

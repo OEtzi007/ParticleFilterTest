@@ -36,9 +36,9 @@ private:
 	void move();
 	void moveParticles();
 	double random();
+	double random(double, double);
 public:
-	RobotIntelligence();
-	RobotIntelligence(LaserSensorInterface&, MotorInterface&, TimeInterface&);
+	RobotIntelligence(LaserSensorInterface&, MotorActuatorInterface&, TimeInterface&);
 	virtual ~RobotIntelligence();
 	void startRobot();
 	void stopRobot();

@@ -6,7 +6,7 @@
 #include "vector.h"
 #include "lasersensor.h"
 
-Robot::Robot(CoordinateSystem* const base, const Coordinate & origin, const double &radius, const std::string &laserConfigFile):Sphere(base,origin,radius)
+Robot::Robot(const CoordinateSystem* const base, const Coordinate & origin, const double &radius, const std::string &laserConfigFile):Sphere(base,origin,radius)
 {
     std::ifstream lcfg(laserConfigFile);
 	int n;
@@ -15,12 +15,8 @@ Robot::Robot(CoordinateSystem* const base, const Coordinate & origin, const doub
 		double phi;
 		lcfg >> phi;
 		phi*=2*PI/360.;
-		Vector direction(cos(phi),sin(phi));
+        Vector direction(&(this->base),cos(phi),sin(phi));
 		Coordinate laserOrigin=direction*radius;
-		laserSensors.push_back(LaserSensor(CoordinateSystem(&this->base,laserOrigin,direction)));
+		laserSensors.push_back(LaserSensor(&(this->base),laserOrigin,direction));
 	}
-}
-
-Robot::Robot(double x, double y, double ori) { //TODO Roboter auf Position (x|y) mit Ausrichtung ori
-
 }

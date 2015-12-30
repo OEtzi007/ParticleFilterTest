@@ -3,7 +3,7 @@
 #include <cmath>
 #include "laser.h"
 
-Sphere::Sphere(CoordinateSystem * const base, const Coordinate& origin, const double& radius):Object(CoordinateSystem(base,origin,Vector(1.,0.,0.),Vector(0.,1.,0.))),radius(radius)
+Sphere::Sphere(const CoordinateSystem * const base, const Coordinate& origin, const double& radius):Object(CoordinateSystem(base,origin)),radius(radius)
 {
 
 }

@@ -13,7 +13,7 @@
 #include "lasersensorinterface.h"
 #include "motoractuatorinterface.h"
 #include "timeinterface.h"
-#include "robot.h"
+#include "simulatedtestrobot.h"
 
 struct Particle{
 	double x, y;
@@ -27,7 +27,7 @@ private:
 	MotorActuatorInterface &motorData;
 	TimeInterface &timeData;
 	std::vector<Particle> particles;
-    Robot myFriend;
+    SimulatedTestRobot myFriend;
 
 	void run();
 	void initParticles();

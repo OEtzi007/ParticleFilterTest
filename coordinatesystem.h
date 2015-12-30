@@ -8,11 +8,11 @@
 class CoordinateSystem : public Coordinate
 {
 private:
-	CoordinateSystem* const base;
 	Vector axis[3];
 public:
-	CoordinateSystem(CoordinateSystem* const, const Coordinate&, const Vector&, const Vector&);
-	CoordinateSystem(CoordinateSystem* const, const Coordinate&, const Vector&);
+	CoordinateSystem(const CoordinateSystem* const, Coordinate, const Vector&, const Vector&);
+	CoordinateSystem(const CoordinateSystem* const, const Coordinate&, const Vector&);
+	CoordinateSystem(const CoordinateSystem* const, const Coordinate&);
 };
 
 #endif // COORDINATESYSTEM_H

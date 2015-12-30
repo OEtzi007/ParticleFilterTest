@@ -12,6 +12,8 @@ public:
 	static const double width;
 	static const double height;
 
+    static const CoordinateSystem* const base;
+
 	Map();
 };
 

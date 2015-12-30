@@ -11,8 +11,8 @@
 #include "constants.h"
 #include "map.h"
 
-RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorActuatorInterface &motorData, TimeInterface &timeData):laserData(laserData), motorData(motorData), timeData(timeData) {
-    myFriend = new Robot();
+RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorActuatorInterface &motorData, TimeInterface &timeData):laserData(laserData), motorData(motorData), timeData(timeData)
+{
 }
 
 RobotIntelligence::~RobotIntelligence() {
@@ -32,9 +32,10 @@ void RobotIntelligence::run() {
         lastTime = timeData.getTime();
         moveParticles(timeStep);
 		evalSensors();
+
+        estimatePosition();
 		resampling();
 
-		estimatePosition();
 		move();
 	}
 }
@@ -47,8 +48,8 @@ void RobotIntelligence::evalSensors() {
 	std::vector<double> sensorData = readSensors();
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
         Particle &curParticle = particles.at(i);
-        myFriend = Robot(curParticle.x, curParticle.y, curParticle.ori); //TODO Konstruktor implementieren
-        std::vector<double> particleDistances = myFriend.getDistances();
+        myFriend.set(curParticle.x, curParticle.y, curParticle.ori);
+        std::vector<double> particleDistances = myFriend.getNonErrorDistances();
         for(unsigned int j=0; j<sensorData.size(); j++) {
             curParticle.weight *= gaussian(sensorData[j], particleDistances[j], LaserSensorInterface::relSigmaL*particleDistances[j]);
         }
@@ -93,8 +94,8 @@ void RobotIntelligence::move() {
 }
 
 void RobotIntelligence::moveParticles(double timeStep) {
-    std::normal_distribution<double> v_x(motorData.getVelocity().getX(), MotorActuatorInterface::relSigmaV*motorData.getVelocity().getX());
-    std::normal_distribution<double> v_y(motorData.getVelocity().getY(), MotorActuatorInterface::relSigmaV*motorData.getVelocity().getY());
+    std::normal_distribution<double> v_x(motorData.getVelocity().x, MotorActuatorInterface::relSigmaV*motorData.getVelocity().x);
+    std::normal_distribution<double> v_y(motorData.getVelocity().y, MotorActuatorInterface::relSigmaV*motorData.getVelocity().y);
     std::normal_distribution<double> omega(motorData.getOmega(), MotorActuatorInterface::sigmaOmega);
     std::default_random_engine re;
     for(int i=0; i<NUM_PARTICLES; i++) {
@@ -117,8 +118,8 @@ void RobotIntelligence::moveParticles(double timeStep) {
 void RobotIntelligence::initParticles() {
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle;
-		curParticle.x=random()*Map::width+Map::origin.getX();
-		curParticle.y=random()*Map::height+Map::origin.getY();
+		curParticle.x=random()*Map::width+Map::origin.x;
+		curParticle.y=random()*Map::height+Map::origin.y;
 		curParticle.ori=random()*2*PI;
 		curParticle.weight=1;
 		particles.push_back(curParticle);

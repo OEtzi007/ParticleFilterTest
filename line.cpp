@@ -13,7 +13,6 @@ Line::Line(CoordinateSystem* const base, const Coordinate &start, const Coordina
 }
 
 Line::~Line() {
-	// TODO Auto-generated destructor stub
 }
 
 double Line::evalLaser(const Laser &laser) const {

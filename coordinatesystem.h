@@ -14,6 +14,8 @@ public:
 	CoordinateSystem(const CoordinateSystem* const, Coordinate, Vector);
 	CoordinateSystem(const CoordinateSystem* const, Coordinate);
 
+	Coordinate& transform(const CoordinateSystem* const)=delete; //TODO and add different transform for vector and cooSystem
+
 	CoordinateSystem& moveAxes(Vector,Vector);
 	CoordinateSystem& moveAxes(Vector);
 	CoordinateSystem& moveAxes();

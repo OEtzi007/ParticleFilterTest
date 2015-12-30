@@ -9,7 +9,7 @@ Coordinate::Coordinate(const CoordinateSystem* const base, const double &x, cons
 }
 
 
-Coordinate& Coordinate::transform(const CoordinateSystem* const toSystem) //TODO and add different transform for vector and cooSystem
+Coordinate& Coordinate::transform(const CoordinateSystem* const toSystem)
 {
 	if(toSystem==this->base)
 		return *this;

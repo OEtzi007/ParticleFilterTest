@@ -8,6 +8,8 @@ class Vector : public Coordinate
 public:
 	Vector(const CoordinateSystem* const, const double& x=0, const double& y=0, const double& z=0);
 
+	Vector& transform(const CoordinateSystem* const);
+
 	double length() const;
 
 	friend Vector operator+(const Vector&, Vector);

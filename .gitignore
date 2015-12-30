@@ -28,7 +28,6 @@
 *.app
 
 # Project Files
-*.pro
 *.pro.user
 /Debug/
 *.cproject

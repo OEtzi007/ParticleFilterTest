@@ -8,7 +8,7 @@ LaserSensorInterface::LaserSensorInterface()
 
 }
 
-std::vector<double> LaserSensorInterface::getSensorData() {
+std::vector<double> LaserSensorInterface::getSensorData(){
     laserInterfaceMutex.lock();
 
     laserInterfaceMutex.unlock();

@@ -2,15 +2,32 @@
 
 CoordinateSystem::CoordinateSystem(const CoordinateSystem * const base, Coordinate origin, Vector xAxis, Vector yAxis): Coordinate(origin.transform(base)),axis{Vector(base),Vector(base),Vector(base)}
 {
+	moveAxes(xAxis,yAxis);
+}
+
+CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin, Vector xAxis): Coordinate(origin.transform(base)),axis{Vector(base),Vector(base),Vector(base)}{
+	moveAxes(xAxis);
+}
+
+CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin): Coordinate(origin.transform(base)), axis{Vector(base),Vector(base),Vector(base)}
+{
+	moveAxes();
+}
+
+CoordinateSystem& CoordinateSystem::moveAxes(Vector xAxis,Vector yAxis)
+{
 	xAxis.transform(base);
 	yAxis.transform(base);
 	axis[0]=xAxis/xAxis.length();
 	axis[2]=cross(xAxis,yAxis);
 	axis[2]=axis[2]/axis[2].length();
 	axis[1]=cross(axis[2],axis[0]);
+
+	return *this;
 }
 
-CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin, Vector xAxis): Coordinate(origin.transform(base)),axis{Vector(base),Vector(base),Vector(base)}{
+CoordinateSystem& CoordinateSystem::moveAxes(Vector xAxis)
+{
 	xAxis.transform(base);
 	axis[0]=xAxis/xAxis.length();
 	if(xAxis.z){
@@ -23,8 +40,15 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinat
 		axis[2]=Vector(base,0.,0.,1.);
 	}
 	axis[1]=cross(axis[2],axis[0]);
+
+	return *this;
 }
 
-CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin): Coordinate(origin.transform(base)), axis{Vector(base,1,0,0),Vector(base,0,1,0),Vector(base,0,0,1)}
+CoordinateSystem& CoordinateSystem::moveAxes()
 {
+	axis[0]=Vector(base,1,0,0);
+	axis[1]=Vector(base,0,1,0);
+	axis[2]=Vector(base,0,0,1);
+
+	return *this;
 }

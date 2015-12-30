@@ -13,6 +13,10 @@ public:
 	CoordinateSystem(const CoordinateSystem* const, Coordinate, Vector, Vector);
 	CoordinateSystem(const CoordinateSystem* const, Coordinate, Vector);
 	CoordinateSystem(const CoordinateSystem* const, Coordinate);
+
+	CoordinateSystem& moveAxes(Vector,Vector);
+	CoordinateSystem& moveAxes(Vector);
+	CoordinateSystem& moveAxes();
 };
 
 #endif // COORDINATESYSTEM_H

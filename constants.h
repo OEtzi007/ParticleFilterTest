@@ -10,6 +10,8 @@
 
 #include <string>
 
+class CoordinateSystem;
+
 const double PI=3.14159265359;
 const unsigned int NUM_PARTICLES=100;
 const double REL_SIGMA_L = 0.01;

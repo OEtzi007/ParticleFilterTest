@@ -14,6 +14,7 @@
 #include "motoractuatorinterface.h"
 #include "timeinterface.h"
 #include "simulatedtestrobot.h"
+#include "map.h"
 
 struct Particle{
 	double x, y;
@@ -26,6 +27,8 @@ private:
 	LaserSensorInterface &laserData;
 	MotorActuatorInterface &motorData;
 	TimeInterface &timeData;
+
+    Map map;
 	std::vector<Particle> particles;
     SimulatedTestRobot myFriend;
 

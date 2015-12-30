@@ -11,7 +11,7 @@
 #include "constants.h"
 #include "map.h"
 
-RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorActuatorInterface &motorData, TimeInterface &timeData):laserData(laserData), motorData(motorData), timeData(timeData)
+RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorActuatorInterface &motorData, TimeInterface &timeData):laserData(laserData), motorData(motorData), timeData(timeData), myFriend(SimulatedTestRobot(&map.base, Coordinate(&map.base)))
 {
 }
 
@@ -118,8 +118,8 @@ void RobotIntelligence::moveParticles(double timeStep) {
 void RobotIntelligence::initParticles() {
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle;
-		curParticle.x=random()*Map::width+Map::origin.x;
-		curParticle.y=random()*Map::height+Map::origin.y;
+        curParticle.x=random()*map.width+map.base.x;
+        curParticle.y=random()*map.height+map.base.y;
 		curParticle.ori=random()*2*PI;
 		curParticle.weight=1;
 		particles.push_back(curParticle);

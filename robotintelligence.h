@@ -9,6 +9,7 @@
 #define ROBOTINTELLIGENCE_H_
 
 #include <vector>
+#include <QtCore>
 
 #include "lasersensorinterface.h"
 #include "motoractuatorinterface.h"
@@ -20,7 +21,7 @@ struct Particle{
 	double weight;
 };
 
-class RobotIntelligence {
+class RobotIntelligence : public QThread {
 private:
 	LaserSensorInterface &laserData;
 	MotorActuatorInterface &motorData;

@@ -18,7 +18,7 @@ RobotIntelligence::~RobotIntelligence() {
 	// TODO Auto-generated destructor stub
 }
 
-void RobotIntelligence::run() {
+void RobotIntelligence::run() /*Q_DECL_OVERRIDE*/ {
 	initParticles();
 	while(true) { //TODO
 		std::vector<double> sensorData = readSensors();

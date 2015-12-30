@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     sphere.cpp \
     timeinterface.cpp \
     vector.cpp \
-    world.cpp
+    world.cpp \
+    simulation.cpp
 
 HEADERS  += mainwindow.h \
     constants.h \
@@ -48,7 +49,8 @@ HEADERS  += mainwindow.h \
     sphere.h \
     timeinterface.h \
     vector.h \
-    world.h
+    world.h \
+    simulation.h
 
 FORMS    += mainwindow.ui
 

@@ -6,7 +6,7 @@ class Vector;
 
 class Coordinate
 {
-private:
+protected:
 	const CoordinateSystem* base;
 public:
 	double x;
@@ -14,7 +14,6 @@ public:
 	double z;
 
 	Coordinate(const CoordinateSystem* const, const double& x=0, const double& y=0, const double& z=0);
-	//Coordinate& operator=(const Coordinate&); TODO remove
 
 	Coordinate& transform(const CoordinateSystem* const); //TODO and add different transform for vector and cooSystem
 

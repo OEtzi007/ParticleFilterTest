@@ -25,7 +25,6 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinat
 	axis[1]=cross(axis[2],axis[0]);
 }
 
-CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin): Coordinate(origin.transform(base)), axis{Vector(base),Vector(base),Vector(base)}
+CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin): Coordinate(origin.transform(base)), axis{Vector(base,1,0,0),Vector(base,0,1,0),Vector(base,0,0,1)}
 {
-	//TODO
 }

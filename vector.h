@@ -10,6 +10,7 @@ public:
 
 	double length() const;
 
+	friend Vector operator+(const Vector&, Vector);
 	friend Coordinate operator+(const Coordinate&, Vector);
 	friend Coordinate operator+(Vector, const Coordinate&);
 	friend Vector operator*(const double&, const Vector&);

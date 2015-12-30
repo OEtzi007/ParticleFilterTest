@@ -7,9 +7,9 @@
 
 class CoordinateSystem : public Coordinate
 {
-private:
-	Vector axis[3];
 public:
+	Vector axis[3];
+
 	CoordinateSystem(const CoordinateSystem* const, Coordinate, Vector, Vector);
 	CoordinateSystem(const CoordinateSystem* const, Coordinate, Vector);
 	CoordinateSystem(const CoordinateSystem* const, Coordinate);

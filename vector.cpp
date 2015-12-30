@@ -11,6 +11,12 @@ double Vector::length() const
 	return sqrt((*this)*(*this));
 }
 
+Vector operator+(const Vector& a, Vector b)
+{
+	b.transform(a.base);
+	return Vector(a.base,a.x+b.x,a.y+b.y,a.z+b.z);
+}
+
 Coordinate operator+(const Coordinate& coo, Vector vec){
 	vec.transform(coo.base);
 	return Coordinate(coo.getBase(),coo.x+vec.x,coo.y+vec.y,coo.z+vec.z);

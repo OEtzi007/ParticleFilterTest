@@ -8,7 +8,7 @@ SimulatedTestRobot::SimulatedTestRobot(const CoordinateSystem* const base, const
 }
 
 std::vector<double> SimulatedTestRobot::getNonErrorDistances() const{
-
+	return std::vector<double>();	//TODO
 }
 
 void SimulatedTestRobot::set(double x, double y, double ori) {

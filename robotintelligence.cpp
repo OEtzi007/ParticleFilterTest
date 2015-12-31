@@ -11,7 +11,10 @@
 #include "constants.h"
 #include "map.h"
 
-RobotIntelligence::RobotIntelligence(Interface& laserData, Interface& motorData, Interface& timeData):laserData(laserData), motorData(motorData), timeData(timeData), myFriend(SimulatedTestRobot(&map.base, Coordinate(&map.base)))
+#include "lasersensorinterface.h"	//TODO remove later on
+#include "motoractuatorinterface.h"	//TODO remove later on
+
+RobotIntelligence::RobotIntelligence(Interfaces& interfaces):laserData(&interfaces.laserSensorI), motorData(&interfaces.motorActuatorI), timeData(&interfaces.timeI), myFriend(SimulatedTestRobot(&map.base, Coordinate(&map.base)))
 {
 }
 
@@ -21,15 +24,15 @@ RobotIntelligence::~RobotIntelligence() {
 
 void RobotIntelligence::run(){
 	initParticles();
-	double lastTime = timeData.getAllData()[0];
-	unsigned int lastMeasurementId = laserData.getAllData()[0]-1;
+	double lastTime = timeData->getAllData()[0];
+	unsigned int lastMeasurementId = laserData->getAllData()[0]-1;
 	while(true) { //TODO
-		if(lastMeasurementId == laserData.getAllData()[0])
+		if(lastMeasurementId == laserData->getAllData()[0])
 			continue;
 
-		lastMeasurementId = laserData.getAllData()[0];
-		double timeStep = timeData.getAllData()[0]-lastTime;
-		lastTime = timeData.getAllData()[0];
+		lastMeasurementId = laserData->getAllData()[0];
+		double timeStep = timeData->getAllData()[0]-lastTime;
+		lastTime = timeData->getAllData()[0];
 		moveParticles(timeStep);
 		evalSensors();
 
@@ -41,7 +44,7 @@ void RobotIntelligence::run(){
 }
 
 std::vector<double> RobotIntelligence::readSensors() {
-	return std::vector<double>(laserData.getAllData()); //TODO wird Kopie angelegt?
+	return std::vector<double>(laserData->getAllData()); //TODO wird Kopie angelegt?
 }
 
 void RobotIntelligence::evalSensors() {
@@ -94,9 +97,9 @@ void RobotIntelligence::move() {
 }
 
 void RobotIntelligence::moveParticles(double timeStep) {
-	std::normal_distribution<double> v_x(motorData.getData("vx"), MotorActuatorInterface::relSigmaV*motorData.getData("vx"));
-	std::normal_distribution<double> v_y(motorData.getData("vy"), MotorActuatorInterface::relSigmaV*motorData.getData("vy"));
-	std::normal_distribution<double> omega(motorData.getData("omega"), MotorActuatorInterface::sigmaOmega);
+	std::normal_distribution<double> v_x(motorData->getData("vx"), MotorActuatorInterface::relSigmaV*motorData->getData("vx"));
+	std::normal_distribution<double> v_y(motorData->getData("vy"), MotorActuatorInterface::relSigmaV*motorData->getData("vy"));
+	std::normal_distribution<double> omega(motorData->getData("omega"), MotorActuatorInterface::sigmaOmega);
 	std::default_random_engine re;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle &curParticle = particles[i];
@@ -146,4 +149,11 @@ double RobotIntelligence::gaussian(double x, double mean, double sigma) {
 	double expNumerator = -std::pow(2, x-mean);
 	double expDenominator = 2* std::pow(2, sigma);
 	return std::exp(expNumerator/expDenominator)/(sigma*std::sqrt(2*PI));
+}
+
+void RobotIntelligence::reset(Interfaces& interfaces)
+{
+	laserData=&interfaces.laserSensorI;
+	motorData=&interfaces.motorActuatorI;
+	timeData=&interfaces.timeI;
 }

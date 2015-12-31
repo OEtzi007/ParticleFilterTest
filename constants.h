@@ -14,6 +14,9 @@ class CoordinateSystem;
 
 const double PI=3.14159265359;
 const unsigned int NUM_PARTICLES=100;
+
+//SIMULATION
+const long double TIME_PER_TICK = 0.001;
 const double REL_SIGMA_L = 0.01;
 const double REL_SIGMA_V = 0.01;
 const double SIGMA_OMEGA = 2*PI/360;

@@ -9,22 +9,34 @@ Interface::Interface(const unsigned int& size, const std::vector<std::string>& d
 		mappedNames.insert({dataNames[i],i});
 }
 
+Interface::Interface(const Interface& toCopy):data(toCopy.data),mappedNames(toCopy.mappedNames),size(toCopy.size)
+{
+}
+
 Interface::~Interface()
 {
 }
 
 void Interface::setData(const std::vector<double> & insertData)
 {
+	dataLocker.lock();
 	assert(insertData.size()==size);	//TODO assert
 	data=insertData;
+	dataLocker.unlock();
 }
 
-std::vector<double> Interface::getAllData() const
+std::vector<double> Interface::getAllData()
 {
-	return data;
+	dataLocker.lock();
+	std::vector<double> copy(data);
+	dataLocker.unlock();
+	return copy;
 }
 
-double Interface::getData(const std::string& dataName) const
+double Interface::getData(const std::string& dataName)
 {
-	return data[mappedNames.at(dataName)];
+	dataLocker.lock();
+	double result=data[mappedNames.at(dataName)];
+	dataLocker.unlock();
+	return result;
 }

@@ -11,9 +11,7 @@
 #include <QThread>
 #include <vector>
 
-#include "lasersensorinterface.h"
-#include "motoractuatorinterface.h"
-#include "timeinterface.h"
+#include "interface.h"
 #include "simulatedtestrobot.h"
 #include "map.h"
 
@@ -25,9 +23,9 @@ struct Particle{
 
 class RobotIntelligence : public QThread {
 private:
-	Interface &laserData;
-	Interface &motorData;
-	Interface &timeData;
+	Interface* laserData;
+	Interface* motorData;
+	Interface* timeData;
 
 	Map map;
 	std::vector<Particle> particles;
@@ -46,10 +44,11 @@ private:
 	double gaussian(double, double, double);
 
 public:
-	RobotIntelligence(Interface&, Interface&, Interface&);
+	RobotIntelligence(Interfaces&);
 	virtual ~RobotIntelligence();
 	void startRobot();
 	void stopRobot();
+	void reset(Interfaces&);
 };
 
 #endif /* ROBOTINTELLIGENCE_H_ */

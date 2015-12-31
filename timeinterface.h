@@ -5,7 +5,6 @@
 
 class TimeInterface : public Interface
 {
-private:
 public:
 	TimeInterface();
     double getTime() const;

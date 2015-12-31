@@ -38,11 +38,12 @@ private:
 	void evalSensors();
 	void resampling();
 	void estimatePosition();
+	void calcSigma();
 	void move();
-    void moveParticles(double);
+	void moveParticles(const double);
 	double random();
-	double random(double, double);
-    double gaussian(double, double, double);
+	double random(const double, const double);
+	double gaussian(const double, const double, const double);
 public:
 	RobotIntelligence(LaserSensorInterface&, MotorActuatorInterface&, TimeInterface&);
 	virtual ~RobotIntelligence();

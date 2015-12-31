@@ -1,6 +1,6 @@
 #include "motoractuatorinterface.h"
-#include "constants.h"
 
+#include "constants.h"
 #include "coordinatesystem.h"
 
 const double MotorActuatorInterface::relSigmaV = REL_SIGMA_V;
@@ -16,5 +16,5 @@ Vector MotorActuatorInterface::getVelocity() const{
 }
 
 double MotorActuatorInterface::getOmega() const{
-    return 0;
+    return 0; //TODO
 }

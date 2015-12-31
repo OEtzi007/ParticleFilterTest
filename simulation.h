@@ -1,7 +1,7 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-#include <QtCore>
+#include <QThread>
 
 class Simulation : public QThread
 {

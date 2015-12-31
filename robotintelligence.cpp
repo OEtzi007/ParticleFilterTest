@@ -11,7 +11,7 @@
 #include "constants.h"
 #include "map.h"
 
-RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorActuatorInterface &motorData, TimeInterface &timeData):laserData(laserData), motorData(motorData), timeData(timeData), myFriend(SimulatedTestRobot(&map.base, Coordinate(&map.base)))
+RobotIntelligence::RobotIntelligence(Interface& laserData, Interface& motorData, Interface& timeData):laserData(laserData), motorData(motorData), timeData(timeData), myFriend(SimulatedTestRobot(&map.base, Coordinate(&map.base)))
 {
 }
 
@@ -19,21 +19,21 @@ RobotIntelligence::~RobotIntelligence() {
 	// TODO Auto-generated destructor stub
 }
 
-void RobotIntelligence::run() /*Q_DECL_OVERRIDE*/ {
+void RobotIntelligence::run(){
 	initParticles();
-    double lastTime = timeData.getTime();
-    unsigned int lastMeasurementId = laserData.getMeasurementId()-1;
+	double lastTime = timeData.getAllData()[0];
+	unsigned int lastMeasurementId = laserData.getAllData()[0]-1;
 	while(true) { //TODO
-        if(lastMeasurementId == laserData.getMeasurementId())
-            continue;
+		if(lastMeasurementId == laserData.getAllData()[0])
+			continue;
 
-        lastMeasurementId = laserData.getMeasurementId();
-        double timeStep = timeData.getTime()-lastTime;
-        lastTime = timeData.getTime();
-        moveParticles(timeStep);
+		lastMeasurementId = laserData.getAllData()[0];
+		double timeStep = timeData.getAllData()[0]-lastTime;
+		lastTime = timeData.getAllData()[0];
+		moveParticles(timeStep);
 		evalSensors();
 
-        estimatePosition();
+		estimatePosition();
 		resampling();
 
 		move();
@@ -41,18 +41,18 @@ void RobotIntelligence::run() /*Q_DECL_OVERRIDE*/ {
 }
 
 std::vector<double> RobotIntelligence::readSensors() {
-	return std::vector<double>(laserData.getSensorData()); //TODO wird Kopie angelegt?
+	return std::vector<double>(laserData.getAllData()); //TODO wird Kopie angelegt?
 }
 
 void RobotIntelligence::evalSensors() {
 	std::vector<double> sensorData = readSensors();
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
-        Particle &curParticle = particles.at(i);
-        myFriend.set(curParticle.x, curParticle.y, curParticle.ori);
-        std::vector<double> particleDistances = myFriend.getNonErrorDistances();
-        for(unsigned int j=0; j<sensorData.size(); j++) {
-            curParticle.weight *= gaussian(sensorData[j], particleDistances[j], LaserSensorInterface::relSigmaL*particleDistances[j]);
-        }
+		Particle &curParticle = particles.at(i);
+		myFriend.set(curParticle.x, curParticle.y, curParticle.ori);
+		std::vector<double> particleDistances = myFriend.getNonErrorDistances();
+		for(unsigned int j=0; j<sensorData.size(); j++) {
+			curParticle.weight *= gaussian(sensorData[j], particleDistances[j], LaserSensorInterface::relSigmaL*particleDistances[j]);
+		}
 	}
 }
 
@@ -94,32 +94,32 @@ void RobotIntelligence::move() {
 }
 
 void RobotIntelligence::moveParticles(double timeStep) {
-    std::normal_distribution<double> v_x(motorData.getVelocity().x, MotorActuatorInterface::relSigmaV*motorData.getVelocity().x);
-    std::normal_distribution<double> v_y(motorData.getVelocity().y, MotorActuatorInterface::relSigmaV*motorData.getVelocity().y);
-    std::normal_distribution<double> omega(motorData.getOmega(), MotorActuatorInterface::sigmaOmega);
-    std::default_random_engine re;
-    for(int i=0; i<NUM_PARTICLES; i++) {
-        Particle &curParticle = particles[i];
-        double s_x = v_x(re)*timeStep;
-        double s_y = v_y(re)*timeStep;
-        double delx=cos(curParticle.ori)*s_x;
-        double dely=sin(curParticle.ori)*s_x;
-        delx-=sin(curParticle.ori)*s_y;
-        dely+=cos(curParticle.ori)*s_y;
-        curParticle.x+=delx;
-        curParticle.y+=dely;
-        curParticle.ori=curParticle.ori+omega(re)*timeStep;
-        while(curParticle.ori >= 2*PI) { //modulo function for double's
-            curParticle.ori -= 2*PI;
-        }
-    }
+	std::normal_distribution<double> v_x(motorData.getData("vx"), MotorActuatorInterface::relSigmaV*motorData.getData("vx"));
+	std::normal_distribution<double> v_y(motorData.getData("vy"), MotorActuatorInterface::relSigmaV*motorData.getData("vy"));
+	std::normal_distribution<double> omega(motorData.getData("omega"), MotorActuatorInterface::sigmaOmega);
+	std::default_random_engine re;
+	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
+		Particle &curParticle = particles[i];
+		double s_x = v_x(re)*timeStep;
+		double s_y = v_y(re)*timeStep;
+		double delx=cos(curParticle.ori)*s_x;
+		double dely=sin(curParticle.ori)*s_x;
+		delx-=sin(curParticle.ori)*s_y;
+		dely+=cos(curParticle.ori)*s_y;
+		curParticle.x+=delx;
+		curParticle.y+=dely;
+		curParticle.ori=curParticle.ori+omega(re)*timeStep;
+		while(curParticle.ori >= 2*PI) { //modulo function for double's
+			curParticle.ori -= 2*PI;
+		}
+	}
 }
 
 void RobotIntelligence::initParticles() {
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle;
-        curParticle.x=random()*map.width+map.base.x;
-        curParticle.y=random()*map.height+map.base.y;
+		curParticle.x=random()*map.width+map.base.x;
+		curParticle.y=random()*map.height+map.base.y;
 		curParticle.ori=random()*2*PI;
 		curParticle.weight=1;
 		particles.push_back(curParticle);
@@ -127,11 +127,11 @@ void RobotIntelligence::initParticles() {
 }
 
 double RobotIntelligence::random() {
-	   double lower_bound = 0;
-	   double upper_bound = 1;
-	   std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
-	   std::default_random_engine re;
-	   return unif(re);
+	double lower_bound = 0;
+	double upper_bound = 1;
+	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
+	std::default_random_engine re;
+	return unif(re);
 }
 
 double RobotIntelligence::random(double lower_bound, double upper_bound) {
@@ -141,9 +141,9 @@ double RobotIntelligence::random(double lower_bound, double upper_bound) {
 }
 
 double RobotIntelligence::gaussian(double x, double mean, double sigma) {
-    if(sigma == 0)
-        return x==mean ? 1 : 0;
-    double expNumerator = -std::pow(2, x-mean);
-    double expDenominator = 2* std::pow(2, sigma);
-    return std::exp(expNumerator/expDenominator)/(sigma*std::sqrt(2*PI));
+	if(sigma == 0)
+		return x==mean ? 1 : 0;
+	double expNumerator = -std::pow(2, x-mean);
+	double expDenominator = 2* std::pow(2, sigma);
+	return std::exp(expNumerator/expDenominator)/(sigma*std::sqrt(2*PI));
 }

@@ -8,8 +8,8 @@
 #ifndef ROBOTINTELLIGENCE_H_
 #define ROBOTINTELLIGENCE_H_
 
+#include <QThread>
 #include <vector>
-#include <QtCore>
 
 #include "lasersensorinterface.h"
 #include "motoractuatorinterface.h"
@@ -25,15 +25,15 @@ struct Particle{
 
 class RobotIntelligence : public QThread {
 private:
-	LaserSensorInterface &laserData;
-	MotorActuatorInterface &motorData;
-	TimeInterface &timeData;
+	Interface &laserData;
+	Interface &motorData;
+	Interface &timeData;
 
 	Map map;
 	std::vector<Particle> particles;
 	SimulatedTestRobot myFriend;
 
-	void run();
+	void run() Q_DECL_OVERRIDE ;
 	void initParticles();
 	std::vector<double> readSensors();
 	void evalSensors();
@@ -46,7 +46,7 @@ private:
 	double gaussian(double, double, double);
 
 public:
-	RobotIntelligence(LaserSensorInterface&, MotorActuatorInterface&, TimeInterface&);
+	RobotIntelligence(Interface&, Interface&, Interface&);
 	virtual ~RobotIntelligence();
 	void startRobot();
 	void stopRobot();

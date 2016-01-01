@@ -8,7 +8,7 @@ class Sphere : public Object
 {
 	double radius;
 public:
-	Sphere(const CoordinateSystem* const, const Coordinate&, const double&);
+	Sphere(World* const, const CoordinateSystem* const, const Coordinate&, const double&);
 
 	double evalLaser(const Laser&) const;
 };

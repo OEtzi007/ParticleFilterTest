@@ -7,12 +7,15 @@
 
 class CoordinateSystem : public Coordinate
 {
+private:
+	static bool rootExists;
 public:
 	Vector axes[3];
 
 	CoordinateSystem(const CoordinateSystem* const, const Coordinate&, const Vector&, const Vector&);
 	CoordinateSystem(const CoordinateSystem* const, const Coordinate&, const Vector&);
 	CoordinateSystem(const CoordinateSystem* const, const Coordinate&);
+	~CoordinateSystem();
 
 	CoordinateSystem transform(const CoordinateSystem* const) const;
 

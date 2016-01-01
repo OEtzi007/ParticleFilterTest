@@ -9,7 +9,7 @@ public:
 	static const double relSigmaV;
 	static const double relSigmaOmega;
 
-	MotorActuator(const CoordinateSystem* const, const Coordinate&);
+	MotorActuator(World* const, const CoordinateSystem* const, const Coordinate&);
 
 	double evalLaser(const Laser&) const;
 };

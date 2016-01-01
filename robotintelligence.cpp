@@ -13,7 +13,7 @@
 #include "map.h"
 #include "motoractuator.h"
 
-RobotIntelligence::RobotIntelligence(Interfaces& interfaces):laserData(&interfaces.laserSensorI), motorData(&interfaces.motorActuatorI), timeData(&interfaces.timeI), myFriend(SimulatedTestRobot(&map.base, Coordinate(&map.base)))
+RobotIntelligence::RobotIntelligence(Interfaces& interfaces):laserData(&interfaces.laserSensorI), motorData(&interfaces.motorActuatorI), timeData(&interfaces.timeI), myFriend(SimulatedTestRobot(&map,&map.base, Coordinate(&map.base)))
 {
 }
 

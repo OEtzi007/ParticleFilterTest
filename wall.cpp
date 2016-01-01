@@ -10,7 +10,7 @@
 #include "laser.h"
 #include "lasersensor.h"
 
-Wall::Wall(CoordinateSystem* const base, const Coordinate& origin, const Vector& normale):Object(CoordinateSystem(base,origin,normale))
+Wall::Wall(World* const world, CoordinateSystem* const base, const Coordinate& origin, const Vector& normale):Object(world, CoordinateSystem(base,origin,normale))
 {
 }
 

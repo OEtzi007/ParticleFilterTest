@@ -1,6 +1,6 @@
 #include "object.h"
 
-Object::Object(const CoordinateSystem& base):base(base)
+Object::Object(World* const world, const CoordinateSystem& base):world(world), base(base)
 {
 }
 

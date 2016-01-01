@@ -10,7 +10,11 @@ class World
 {
 private:
 	Interfaces* ifs;
+	double time;
+	std::vector<Object*> objects;
 public:
+	const double timePerTick;
+
 	const CoordinateSystem base;
 	const double width;
 	const double height;
@@ -22,6 +26,8 @@ public:
 	void reset(Interfaces&);
 	void tick();
 	void updateTime();
+
+	double evalLaser(const Laser&) const;
 };
 
 #endif // WORLD_H

@@ -8,7 +8,7 @@
 class LaserSensorInterface : public Interface
 {
 public:
-    static const double relSigmaL;
+	static const double relSigmaL;
 
 	LaserSensorInterface();
 

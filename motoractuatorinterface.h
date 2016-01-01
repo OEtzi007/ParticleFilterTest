@@ -7,13 +7,13 @@
 class MotorActuatorInterface : public Interface
 {
 public:
-    static const double relSigmaV;
+	static const double relSigmaV;
 	static const double relSigmaOmega;
 
 	MotorActuatorInterface();
 
-    Vector getVelocity() const;
-    double getOmega() const;
+	Vector getVelocity() const;
+	double getOmega() const;
 };
 
 #endif // MOTORACTUATORINTERFACE_H

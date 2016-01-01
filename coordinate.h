@@ -19,9 +19,9 @@ public:
 
 	const CoordinateSystem* getBase() const;
 
-	friend Vector operator-(Coordinate, const Coordinate&);
-	friend Coordinate operator+(const Coordinate&, Vector);
-	friend Coordinate operator+(Vector, const Coordinate&);
+	friend Vector operator-(const Coordinate&, const Coordinate&);
+	friend Coordinate operator+(const Coordinate&, const Vector&);
+	friend Coordinate operator+(const Vector&, const Coordinate&);
 };
 
 #endif // COORDINATE_H

@@ -12,7 +12,7 @@ std::vector<double> SimulatedTestRobot::getNonErrorDistances() const{
 }
 
 void SimulatedTestRobot::set(double x, double y, double ori) {
-    this->base.x=x;
-    this->base.y=y;
-    this->base.moveAxes(Vector(this->base.getBase(), std::cos(ori), std::sin(ori)));
+	this->base.x=x;
+	this->base.y=y;
+	this->base.moveAxes(Vector(this->base.getBase(), std::cos(ori), std::sin(ori)));
 }

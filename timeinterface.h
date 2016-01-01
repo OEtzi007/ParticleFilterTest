@@ -7,7 +7,7 @@ class TimeInterface : public Interface
 {
 public:
 	TimeInterface();
-    double getTime() const;
+	double getTime() const;
 };
 
 #endif // TIMEINTERFACE_H

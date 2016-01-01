@@ -6,9 +6,9 @@
 class World
 {
 public:
-    const CoordinateSystem base;
-    const double width;
-    const double height;
+	const CoordinateSystem base;
+	const double width;
+	const double height;
 
 	World();
 };

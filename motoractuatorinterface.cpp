@@ -12,9 +12,9 @@ MotorActuatorInterface::MotorActuatorInterface()
 }
 
 Vector MotorActuatorInterface::getVelocity() const{
-    return Vector(0); //TODO
+	return Vector(0); //TODO
 }
 
 double MotorActuatorInterface::getOmega() const{
-    return 0; //TODO
+	return 0; //TODO
 }

@@ -15,12 +15,11 @@ Wall::Wall(CoordinateSystem* const base, const Coordinate& origin, const Vector&
 
 Wall::~Wall()
 {
-	// TODO Auto-generated destructor stub
 }
 
+/* TODO remove
 double Wall::evalLaser(const Laser &laser) const
 {
-	CoordinateSystem copy(base.transform(&laser));
 	Vector lineDir = end-start;
 	if(lineDir.y*laser.getDirection().x == lineDir.x*laser.getDirection().y) {
 		return Laser::range;
@@ -40,4 +39,23 @@ double Wall::evalLaser(const Laser &laser) const
 		return Laser::range;
 	}
 	return t;
+}
+*/
+
+double Wall::evalLaser(const Laser &laser) const
+{
+	if(this->base.axes[0]*laser.axes[0]==0){	//wall parallel to laser
+		if((this->base-laser)*this->base.axes[0]==0){	//laser completly inside the wall
+			return 0;
+		} else {	//laser completly outside the wall
+			return Laser::range;
+		}
+	}
+
+	double intersectionLength=((this->base-Coordinate(this->base.getBase()))*this->base.axes[0])/(laser.axes[0]*this->base.axes[0]);
+	if(intersectionLength<0 || intersectionLength>Laser::range) {
+		return Laser::range;
+	}
+
+	return intersectionLength;
 }

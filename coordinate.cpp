@@ -25,22 +25,22 @@ Coordinate Coordinate::transform(const CoordinateSystem* const toSystem) const
 	}
 	if(goDownTransformTree || this->base==0){	//go down the transform tree
 		const CoordinateSystem* const localToSystem=preSystem;
-		Vector transformedAxis[3]={Vector(localToSystem,
-								   localToSystem->axis[0].x,
-								   localToSystem->axis[1].x,
-								   localToSystem->axis[2].x),
+		Vector transformedAxes[3]={Vector(localToSystem,
+								   localToSystem->axes[0].x,
+								   localToSystem->axes[1].x,
+								   localToSystem->axes[2].x),
 								   Vector(localToSystem,
-								   localToSystem->axis[0].y,
-								   localToSystem->axis[1].y,
-								   localToSystem->axis[2].y),
+								   localToSystem->axes[0].y,
+								   localToSystem->axes[1].y,
+								   localToSystem->axes[2].y),
 								   Vector(localToSystem,
-								   localToSystem->axis[0].z,
-								   localToSystem->axis[1].z,
-								   localToSystem->axis[2].z)};
+								   localToSystem->axes[0].z,
+								   localToSystem->axes[1].z,
+								   localToSystem->axes[2].z)};
 
 		//two lines for transformation
 		Coordinate result(localToSystem,this->x-localToSystem->x,this->y-localToSystem->y,this->z-localToSystem->z);
-		result=result.x*transformedAxis[0]+result.y*transformedAxis[1]+result.z*transformedAxis[2];
+		result=result.x*transformedAxes[0]+result.y*transformedAxes[1]+result.z*transformedAxes[2];
 
 		return result.transform(toSystem);
 	} else {	//go up the transformation tree
@@ -53,7 +53,7 @@ Coordinate Coordinate::transform(const CoordinateSystem* const toSystem) const
 		}
 		//two lines for transformation
 		Coordinate result(localToSystem,this->base->x,this->base->y,this->base->z);
-		result=result+this->x*this->base->axis[0]+this->y*this->base->axis[1]+this->z*this->base->axis[2];
+		result=result+this->x*this->base->axes[0]+this->y*this->base->axes[1]+this->z*this->base->axes[2];
 
 		return result.transform(toSystem);
 	}
@@ -66,7 +66,7 @@ const CoordinateSystem* Coordinate::getBase() const
 	return base;
 }
 
-Vector operator-(Coordinate a, const Coordinate& b){
-	a.transform(b.base);
-	return Vector(b.base,a.x-b.x,a.y-b.y,a.z-b.z);
+Vector operator-(const Coordinate& a, const Coordinate& b){
+	Coordinate a_=a.transform(b.base);
+	return Vector(b.base,a_.x-b.x,a_.y-b.y,a_.z-b.z);
 }

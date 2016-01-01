@@ -3,7 +3,7 @@
 #include <cmath>
 #include "map.h"
 
-SimulatedTestRobot::SimulatedTestRobot(const CoordinateSystem* const base, const Coordinate & origin, const double &radius, const std::string &laserConfigFile):Robot(base, origin, radius, laserConfigFile)
+SimulatedTestRobot::SimulatedTestRobot(World* const world, const CoordinateSystem* const base, const Coordinate & origin, const double &radius, const std::string &laserConfigFile):Robot(world, base, origin, radius, laserConfigFile)
 {
 }
 

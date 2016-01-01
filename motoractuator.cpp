@@ -6,7 +6,7 @@
 const double MotorActuator::relSigmaV=REL_SIGMA_V;
 const double MotorActuator::relSigmaOmega=REL_SIGMA_OMEGA;
 
-MotorActuator::MotorActuator(const CoordinateSystem* const base, const Coordinate& origin) : Object(CoordinateSystem(base,origin))
+MotorActuator::MotorActuator(World* const world, const CoordinateSystem* const base, const Coordinate& origin) : Object(world, CoordinateSystem(base,origin))
 {
 }
 

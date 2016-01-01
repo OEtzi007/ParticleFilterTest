@@ -28,7 +28,8 @@ SOURCES	+= main.cpp\
 	world.cpp \
 	simulation.cpp \
 	simulatedtestrobot.cpp \
-    motoractuator.cpp
+    motoractuator.cpp \
+    constants.cpp
 
 HEADERS	+= mainwindow.h \
 	constants.h \

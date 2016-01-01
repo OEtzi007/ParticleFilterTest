@@ -15,12 +15,11 @@ RobotIntelligence::RobotIntelligence(LaserSensorInterface &laserData, MotorActua
 }
 
 RobotIntelligence::~RobotIntelligence() {
-	// TODO Auto-generated destructor stub
 }
 
 void RobotIntelligence::run() {
 	initParticles();
-	while(true) { //TODO
+	while(true) {
 		std::vector<double> sensorData = readSensors();
 		evalSensors(sensorData);
 		resampling();
@@ -33,7 +32,7 @@ void RobotIntelligence::run() {
 }
 
 std::vector<double> RobotIntelligence::readSensors() {
-	return std::vector<double>(laserData.getSensorData()); //TODO wird Kopie angelegt?
+	return std::vector<double>(laserData.getSensorData());
 }
 
 void RobotIntelligence::evalSensors(std::vector<double> sensorData) {
@@ -55,7 +54,7 @@ void RobotIntelligence::resampling() {
 		for(unsigned int j=0; j<NUM_PARTICLES; j++) { //check for every Particle if it should copy
 			curWeight += particles.at(j).weight;
 			if(curRand <= curWeight) {
-				newParticles.push_back(Particle(particles.at(j))); //TODO wird kopiert oder referenz uebergeben?
+				newParticles.push_back(particles[j]);
 				newParticles.at(newParticles.size()).weight = 1;
 				break;
 			}
@@ -79,8 +78,8 @@ void RobotIntelligence::moveParticles() {
 void RobotIntelligence::initParticles() {
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle;
-		curParticle.x=random()*Map::width+Map::origin.getX();
-		curParticle.y=random()*Map::height+Map::origin.getY();
+		curParticle.x=random()*Map::width+Map::origin.x;
+		curParticle.y=random()*Map::height+Map::origin.y;
 		curParticle.ori=random()*2*PI;
 		curParticle.weight=1;
 		particles.push_back(curParticle);

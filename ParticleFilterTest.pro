@@ -30,7 +30,7 @@ SOURCES += main.cpp\
     timeinterface.cpp \
     vector.cpp \
     world.cpp \
-	simulatedtestrobot.cpp
+    simulatedtestrobot.cpp
 
 HEADERS  += mainwindow.h \
     constants.h \
@@ -50,7 +50,7 @@ HEADERS  += mainwindow.h \
     timeinterface.h \
     vector.h \
     world.h \
-	simulatedtestrobot.h
+    simulatedtestrobot.h
 
 FORMS    += mainwindow.ui
 

@@ -7,3 +7,8 @@ Object::Object(World* const world, const CoordinateSystem& base):world(world), b
 Object::~Object()
 {
 }
+
+const CoordinateSystem& Object::getBase() const
+{
+	return base;
+}

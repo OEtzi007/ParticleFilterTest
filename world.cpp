@@ -13,13 +13,15 @@ void World::reset(Interfaces& interfaces)
 	ifs=&interfaces;
 }
 
+#include <iostream>	//TODO remove
 void World::tick()
 {
 	//TODO
-	time*=timePerTick;
+	time+=timePerTick;
 	robot.move(ifs->motorActuatorI);
 	robot.updateSensors(ifs->laserSensorI);
 	updateTime();
+	std::cout << "World knows at time " << time << ":\tx=" << robot.getBase().x << "\ty=" << robot.getBase().y << "\tori=" << atan2(robot.getBase().axes[0].y, robot.getBase().axes[0].x) << std::endl;	//TODO remove
 }
 
 void World::updateTime() {

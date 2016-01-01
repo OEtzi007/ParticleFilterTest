@@ -15,6 +15,8 @@ public:
 	Object(World* const, const CoordinateSystem&);
 	virtual ~Object();
 	virtual double evalLaser(const Laser&) const = 0;
+
+	const CoordinateSystem& getBase() const;
 };
 
 #endif // OBJECT_H

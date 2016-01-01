@@ -7,7 +7,7 @@ bool CoordinateSystem::rootExists=false;
 CoordinateSystem::CoordinateSystem(const CoordinateSystem * const base, const Coordinate& origin, const Vector& xAxis, const Vector& yAxis): Coordinate(origin.transform(base)),axes{Vector(base),Vector(base),Vector(base)}
 {
 	if(base==0){
-		assert(!rootExists);	//TODO assert
+		//assert(!rootExists);	//TODO assert
 		rootExists=true;
 	}
 	moveAxes(xAxis,yAxis);
@@ -16,7 +16,7 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem * const base, const Co
 CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, const Coordinate& origin, const Vector& xAxis): Coordinate(origin.transform(base)),axes{Vector(base),Vector(base),Vector(base)}
 {
 	if(base==0){
-		assert(!rootExists);	//TODO assert
+		//assert(!rootExists);	//TODO assert
 		rootExists=true;
 	}
 	moveAxes(xAxis);
@@ -25,7 +25,7 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, const Coo
 CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, const Coordinate& origin): Coordinate(origin.transform(base)), axes{Vector(base),Vector(base),Vector(base)}
 {
 	if(base==0){
-		assert(!rootExists);	//TODO assert
+		//assert(!rootExists);	//TODO assert
 		rootExists=true;
 	}
 	moveAxes();
@@ -34,7 +34,7 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, const Coo
 CoordinateSystem::~CoordinateSystem()
 {
 	if(base==0){
-		assert(rootExists);	//TODO assert
+		//assert(rootExists);	//TODO assert
 		rootExists=false;
 	}
 }

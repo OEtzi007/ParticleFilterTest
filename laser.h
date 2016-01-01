@@ -5,13 +5,12 @@
 
 class Laser : public CoordinateSystem
 {
+private:
+	double range;
 public:
-	static const double range;
-	static const double relSigmaL;
+	Laser(const CoordinateSystem* const, const Coordinate&, const Vector&, const double&);
 
-	Laser(const CoordinateSystem* const, Coordinate, Vector, Vector);
-	Laser(const CoordinateSystem* const, Coordinate, Vector);
-	Laser(const CoordinateSystem* const, Coordinate);
+	double getRange() const;
 };
 
 #endif // LASER_H

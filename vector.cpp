@@ -54,9 +54,10 @@ Vector Vector::transform(const CoordinateSystem* const toSystem) const
 		//one line for transformation
 		Vector result=this->x*this->base->axes[0]+this->y*this->base->axes[1]+this->z*this->base->axes[2];
 
-		result.transform(toSystem);
+		return result.transform(toSystem);
 	}
-	return *this;
+	assert(false);	//TODO assert
+	return Vector(toSystem);
 }
 
 double Vector::length() const

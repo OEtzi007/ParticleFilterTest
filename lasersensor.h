@@ -8,6 +8,9 @@
 class LaserSensor : public Object
 {
 public:
+	//static const double range;
+	static const double relSigmaL;
+
 	LaserSensor(const CoordinateSystem* const, const Coordinate&, const Vector&);
 
 	double evalLaser(const Laser&) const;

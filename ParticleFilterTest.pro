@@ -18,19 +18,17 @@ SOURCES	+= main.cpp\
 	interface.cpp \
 	laser.cpp \
 	lasersensor.cpp \
-	lasersensorinterface.cpp \
 	map.cpp \
-	motoractuatorinterface.cpp \
 	object.cpp \
 	robot.cpp \
 	robotintelligence.cpp \
 	sphere.cpp \
-	timeinterface.cpp \
 	vector.cpp \
 	wall.cpp \
 	world.cpp \
 	simulation.cpp \
-	simulatedtestrobot.cpp
+	simulatedtestrobot.cpp \
+    motoractuator.cpp
 
 HEADERS	+= mainwindow.h \
 	constants.h \
@@ -39,19 +37,17 @@ HEADERS	+= mainwindow.h \
 	interface.h \
 	laser.h \
 	lasersensor.h \
-	lasersensorinterface.h \
 	map.h \
-	motoractuatorinterface.h \
 	object.h \
 	robot.h \
 	robotintelligence.h \
 	sphere.h \
-	timeinterface.h \
 	vector.h \
 	wall.h \
 	world.h \
 	simulation.h \
-	simulatedtestrobot.h
+	simulatedtestrobot.h \
+    motoractuator.h
 
 FORMS	+= mainwindow.ui
 

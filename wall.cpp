@@ -8,6 +8,7 @@
 #include "wall.h"
 
 #include "laser.h"
+#include "lasersensor.h"
 
 Wall::Wall(CoordinateSystem* const base, const Coordinate& origin, const Vector& normale):Object(CoordinateSystem(base,origin,normale))
 {
@@ -48,13 +49,13 @@ double Wall::evalLaser(const Laser &laser) const
 		if((this->base-laser)*this->base.axes[0]==0){	//laser completly inside the wall
 			return 0;
 		} else {	//laser completly outside the wall
-			return Laser::range;
+			return laser.getRange();
 		}
 	}
 
 	double intersectionLength=((this->base-Coordinate(this->base.getBase()))*this->base.axes[0])/(laser.axes[0]*this->base.axes[0]);
-	if(intersectionLength<0 || intersectionLength>Laser::range) {
-		return Laser::range;
+	if(intersectionLength<0 || intersectionLength>laser.getRange()) {
+		return laser.getRange();
 	}
 
 	return intersectionLength;

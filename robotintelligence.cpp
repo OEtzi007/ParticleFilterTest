@@ -11,18 +11,18 @@
 #include <cassert>
 #include "constants.h"
 #include "map.h"
-
-#include "lasersensorinterface.h"	//TODO remove later on
-#include "motoractuatorinterface.h"	//TODO remove later on
+#include "motoractuator.h"
 
 RobotIntelligence::RobotIntelligence(Interfaces& interfaces):laserData(&interfaces.laserSensorI), motorData(&interfaces.motorActuatorI), timeData(&interfaces.timeI), myFriend(SimulatedTestRobot(&map.base, Coordinate(&map.base)))
 {
 }
 
-RobotIntelligence::~RobotIntelligence() {
+RobotIntelligence::~RobotIntelligence()
+{
 }
 
-void RobotIntelligence::run(){
+void RobotIntelligence::run()
+{
 	initParticles();
 	double lastTime = timeData->getData("time");
 	//TODO laserDatafrequence
@@ -40,19 +40,21 @@ void RobotIntelligence::run(){
 	}
 }
 
-void RobotIntelligence::evalSensors() {
+void RobotIntelligence::evalSensors()
+{
 	std::vector<double> sensorData(laserData->getAllData());
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle &curParticle = particles[i];
 		myFriend.set(curParticle.x, curParticle.y, curParticle.ori);
 		std::vector<double> particleDistances = myFriend.getNonErrorDistances();
 		for(unsigned int j=0; j<sensorData.size(); j++) {
-			curParticle.weight *= gaussian(sensorData[j], particleDistances[j], LaserSensorInterface::relSigmaL*particleDistances[j]);
+			curParticle.weight *= gaussian(sensorData[j], particleDistances[j], LaserSensor::relSigmaL*particleDistances[j]);
 		}
 	}
 }
 
-void RobotIntelligence::resampling() {
+void RobotIntelligence::resampling()
+{
 	double totalWeight=0;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		totalWeight += particles[i].weight;
@@ -74,7 +76,8 @@ void RobotIntelligence::resampling() {
 	particles = newParticles;
 }
 
-void RobotIntelligence::estimatePosition() { //TODO rethink function, highestWeight best approximation?
+void RobotIntelligence::estimatePosition()
+{ //TODO rethink function, highestWeight best approximation?
 	double highestWeight = 0;
 	Particle bestParticle; // after for-loop this represents the robot's most likely position
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
@@ -85,7 +88,8 @@ void RobotIntelligence::estimatePosition() { //TODO rethink function, highestWei
 	}
 }
 
-double RobotIntelligence::calcSigma() const {
+double RobotIntelligence::calcSigma() const
+{
 	double totalWeight=0;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		totalWeight += particles[i].weight;
@@ -114,14 +118,15 @@ double RobotIntelligence::calcSigma() const {
 	return totalSigma;
 }
 
-void RobotIntelligence::move() {
-
+void RobotIntelligence::move()
+{
 }
 
-void RobotIntelligence::moveParticles(double timeStep) {
-	std::normal_distribution<double> v_x(motorData->getData("vx"), MotorActuatorInterface::relSigmaV*motorData->getData("vx"));
-	std::normal_distribution<double> v_y(motorData->getData("vy"), MotorActuatorInterface::relSigmaV*motorData->getData("vy"));
-	std::normal_distribution<double> omega(motorData->getData("omega"), MotorActuatorInterface::relSigmaOmega*motorData->getData("omega"));
+void RobotIntelligence::moveParticles(double timeStep)
+{
+	std::normal_distribution<double> v_x(motorData->getData("vx"), MotorActuator::relSigmaV*motorData->getData("vx"));
+	std::normal_distribution<double> v_y(motorData->getData("vy"), MotorActuator::relSigmaV*motorData->getData("vy"));
+	std::normal_distribution<double> omega(motorData->getData("omega"), MotorActuator::relSigmaOmega*motorData->getData("omega"));
 	std::default_random_engine re;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle &curParticle = particles[i];
@@ -140,7 +145,8 @@ void RobotIntelligence::moveParticles(double timeStep) {
 	}
 }
 
-void RobotIntelligence::initParticles() {
+void RobotIntelligence::initParticles()
+{
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle;
 		curParticle.x=random()*map.width+map.base.x;
@@ -151,7 +157,8 @@ void RobotIntelligence::initParticles() {
 	}
 }
 
-double RobotIntelligence::random() {
+double RobotIntelligence::random()
+{
 	double lower_bound = 0;
 	double upper_bound = 1;
 	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
@@ -159,13 +166,15 @@ double RobotIntelligence::random() {
 	return unif(re);
 }
 
-double RobotIntelligence::random(const double lower_bound, const double upper_bound) {
+double RobotIntelligence::random(const double lower_bound, const double upper_bound)
+{
 	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
 	std::default_random_engine re;
 	return unif(re);
 }
 
-double RobotIntelligence::gaussian(const double x, const double mean, const double sigma) {
+double RobotIntelligence::gaussian(const double x, const double mean, const double sigma)
+{
 	if(sigma == 0)
 		return x==mean ? 1 : 0;
 	double expNumerator = -std::pow(2, x-mean);

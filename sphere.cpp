@@ -1,6 +1,7 @@
 #include "sphere.h"
 
 #include <cmath>
+#include "lasersensor.h"
 #include "laser.h"
 
 Sphere::Sphere(const CoordinateSystem * const base, const Coordinate& origin, const double& radius):Object(CoordinateSystem(base,origin)),radius(radius)
@@ -30,16 +31,16 @@ double Sphere::evalLaser(const Laser& laser) const
 double Sphere::evalLaser(const Laser& laser) const
 {
 	Coordinate origin_c(base);
-	origin_c.transform(&laser);
+	origin_c=origin_c.transform(&laser);
 	double dist=sqrt(origin_c.y*origin_c.y+origin_c.z*origin_c.z);
 	if(dist>radius)
-		return Laser::range;
+		return laser.getRange();
 	double delta=sqrt(radius*radius-dist*dist);
 	double solutionOne=origin_c.x-delta;
-	if(solutionOne>=0 && solutionOne<=Laser::range)
+	if(solutionOne>=0 && solutionOne<=laser.getRange())
 		return solutionOne;
 	double solutionTwo=origin_c.x+delta;
-	if(solutionTwo>=0 && solutionTwo<=Laser::range)
+	if(solutionTwo>=0 && solutionTwo<=laser.getRange())
 		return solutionTwo;
-	return Laser::range;
+	return laser.getRange();
 }

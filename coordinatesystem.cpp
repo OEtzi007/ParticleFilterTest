@@ -1,15 +1,15 @@
 #include "coordinatesystem.h"
 
-CoordinateSystem::CoordinateSystem(const CoordinateSystem * const base, Coordinate origin, Vector xAxis, Vector yAxis): Coordinate(origin.transform(base)),axes{Vector(base),Vector(base),Vector(base)}
+CoordinateSystem::CoordinateSystem(const CoordinateSystem * const base, const Coordinate& origin, const Vector& xAxis, const Vector& yAxis): Coordinate(origin.transform(base)),axes{Vector(base),Vector(base),Vector(base)}
 {
 	moveAxes(xAxis,yAxis);
 }
 
-CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin, Vector xAxis): Coordinate(origin.transform(base)),axes{Vector(base),Vector(base),Vector(base)}{
+CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, const Coordinate& origin, const Vector& xAxis): Coordinate(origin.transform(base)),axes{Vector(base),Vector(base),Vector(base)}{
 	moveAxes(xAxis);
 }
 
-CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, Coordinate origin): Coordinate(origin.transform(base)), axes{Vector(base),Vector(base),Vector(base)}
+CoordinateSystem::CoordinateSystem(const CoordinateSystem* const base, const Coordinate& origin): Coordinate(origin.transform(base)), axes{Vector(base),Vector(base),Vector(base)}
 {
 	moveAxes();
 }
@@ -19,7 +19,7 @@ CoordinateSystem CoordinateSystem::transform(const CoordinateSystem* const toSys
 	return CoordinateSystem(toSystem,((Coordinate) *this).transform(toSystem),this->axes[0].transform(toSystem),this->axes[1].transform(toSystem));
 }
 
-CoordinateSystem& CoordinateSystem::moveAxes(Vector xAxis,Vector yAxis)
+CoordinateSystem& CoordinateSystem::moveAxes(const Vector& xAxis, const Vector& yAxis)
 {
 	xAxis.transform(base);
 	yAxis.transform(base);
@@ -31,7 +31,7 @@ CoordinateSystem& CoordinateSystem::moveAxes(Vector xAxis,Vector yAxis)
 	return *this;
 }
 
-CoordinateSystem& CoordinateSystem::moveAxes(Vector xAxis)
+CoordinateSystem& CoordinateSystem::moveAxes(const Vector& xAxis)
 {
 	xAxis.transform(base);
 	axes[0]=xAxis/xAxis.length();

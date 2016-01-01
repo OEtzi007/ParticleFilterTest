@@ -30,7 +30,8 @@ SOURCES	+= main.cpp\
 	wall.cpp \
 	world.cpp \
 	simulation.cpp \
-	simulatedtestrobot.cpp
+	simulatedtestrobot.cpp \
+    motoractuator.cpp
 
 HEADERS	+= mainwindow.h \
 	constants.h \
@@ -51,7 +52,8 @@ HEADERS	+= mainwindow.h \
 	wall.h \
 	world.h \
 	simulation.h \
-	simulatedtestrobot.h
+	simulatedtestrobot.h \
+    motoractuator.h
 
 FORMS	+= mainwindow.ui
 

@@ -10,7 +10,7 @@ class Object
 protected:
 	CoordinateSystem base;
 public:
-	Object(CoordinateSystem);
+	Object(const CoordinateSystem&);
 	virtual ~Object();
 	virtual double evalLaser(const Laser&) const = 0;
 };

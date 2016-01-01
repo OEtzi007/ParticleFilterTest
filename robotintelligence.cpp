@@ -67,7 +67,7 @@ void RobotIntelligence::resampling()
 		for(unsigned int j=0; j<NUM_PARTICLES; j++) { //check for every Particle if it should copy
 			curWeight += particles[j].weight;
 			if(curRand <= curWeight) {
-				newParticles.push_back(Particle(particles[j])); //TODO wird kopiert oder referenz uebergeben?
+				newParticles.push_back(Particle(particles[j]));
 				newParticles[newParticles.size()-1].weight = 1;
 				break;
 			}
@@ -127,18 +127,18 @@ void RobotIntelligence::moveParticles(double timeStep)
 	std::normal_distribution<double> v_x(motorData->getData("vx"), MotorActuator::relSigmaV*motorData->getData("vx"));
 	std::normal_distribution<double> v_y(motorData->getData("vy"), MotorActuator::relSigmaV*motorData->getData("vy"));
 	std::normal_distribution<double> omega(motorData->getData("omega"), MotorActuator::relSigmaOmega*motorData->getData("omega"));
-	std::default_random_engine re;
+	std::default_random_engine RANDOM_ENGINE;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle &curParticle = particles[i];
-		double s_x = v_x(re)*timeStep;
-		double s_y = v_y(re)*timeStep;
+		double s_x = v_x(RANDOM_ENGINE)*timeStep;
+		double s_y = v_y(RANDOM_ENGINE)*timeStep;
 		double delx=cos(curParticle.ori)*s_x;
 		double dely=sin(curParticle.ori)*s_x;
 		delx-=sin(curParticle.ori)*s_y;
 		dely+=cos(curParticle.ori)*s_y;
 		curParticle.x+=delx;
 		curParticle.y+=dely;
-		curParticle.ori=curParticle.ori+omega(re)*timeStep;
+		curParticle.ori=curParticle.ori+omega(RANDOM_ENGINE)*timeStep;
 		while(curParticle.ori >= 2*PI) { //modulo function for double's
 			curParticle.ori -= 2*PI;
 		}
@@ -162,15 +162,15 @@ double RobotIntelligence::random()
 	double lower_bound = 0;
 	double upper_bound = 1;
 	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
-	std::default_random_engine re;
-	return unif(re);
+	std::default_random_engine RANDOM_ENGINE;
+	return unif(RANDOM_ENGINE);
 }
 
 double RobotIntelligence::random(const double lower_bound, const double upper_bound)
 {
 	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
-	std::default_random_engine re;
-	return unif(re);
+	std::default_random_engine RANDOM_ENGINE;
+	return unif(RANDOM_ENGINE);
 }
 
 double RobotIntelligence::gaussian(const double x, const double mean, const double sigma)

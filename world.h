@@ -10,12 +10,13 @@ class World
 {
 private:
 	Interfaces* ifs;
-	Robot robot;
 public:
 	const CoordinateSystem base;
 	const double width;
 	const double height;
-
+private:
+	Robot robot;
+public:
 	World();
 
 	void reset(Interfaces&);

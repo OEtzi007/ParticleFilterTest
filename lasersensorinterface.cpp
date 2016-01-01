@@ -7,14 +7,10 @@ LaserSensorInterface::LaserSensorInterface():Interface(0,std::vector<std::string
 {
 }
 
-std::vector<double> LaserSensorInterface::getSensorData(){
+std::vector<double> LaserSensorInterface::getSensorData()
+{
 	laserInterfaceMutex.lock();
 
 	laserInterfaceMutex.unlock();
 	return std::vector<double>(); //TODO
-}
-
-unsigned int LaserSensorInterface::getMeasurementId() const{
-	//TODO
-	return 0;
 }

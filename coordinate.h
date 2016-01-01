@@ -15,13 +15,13 @@ public:
 
 	Coordinate(const CoordinateSystem* const, const double& x=0, const double& y=0, const double& z=0);
 
-	Coordinate& transform(const CoordinateSystem* const); //TODO and add different transform for vector and cooSystem
+	Coordinate transform(const CoordinateSystem* const) const;
 
 	const CoordinateSystem* getBase() const;
 
-	friend Vector operator-(Coordinate, const Coordinate&);
-	friend Coordinate operator+(const Coordinate&, Vector);
-	friend Coordinate operator+(Vector, const Coordinate&);
+	friend Vector operator-(const Coordinate&, const Coordinate&);
+	friend Coordinate operator+(const Coordinate&, const Vector&);
+	friend Coordinate operator+(const Vector&, const Coordinate&);
 };
 
 #endif // COORDINATE_H

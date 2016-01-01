@@ -1,10 +1,10 @@
 #include "motoractuatorinterface.h"
-#include "constants.h"
 
+#include "constants.h"
 #include "coordinatesystem.h"
 
 const double MotorActuatorInterface::relSigmaV = REL_SIGMA_V;
-const double MotorActuatorInterface::sigmaOmega = SIGMA_OMEGA;
+const double MotorActuatorInterface::relSigmaOmega = REL_SIGMA_OMEGA;
 
 MotorActuatorInterface::MotorActuatorInterface(): Interface(0,std::vector<std::string>())	//TODO remove this whole class
 {
@@ -12,9 +12,9 @@ MotorActuatorInterface::MotorActuatorInterface(): Interface(0,std::vector<std::s
 }
 
 Vector MotorActuatorInterface::getVelocity() const{
-    return Vector(0); //TODO
+	return Vector(0); //TODO
 }
 
 double MotorActuatorInterface::getOmega() const{
-    return 0;
+	return 0; //TODO
 }

@@ -11,6 +11,8 @@
 #include <string>
 
 const double PI=3.14159265359;
+
+//ROBOTINTELLIGENCE
 const unsigned int NUM_PARTICLES=100;
 
 //MAP
@@ -24,7 +26,7 @@ const double ROBOT_RADIUS=0.15;
 const std::string LASER_CONFIG_FILE="2D_12.lcfg";
 
 //SIMULATION
-const long double TIME_PER_TICK = 0.001;
+const double TIME_PER_TICK = 0.001;
 
 //LASER
 const double LASER_RANGE=5.;

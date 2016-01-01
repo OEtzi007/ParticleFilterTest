@@ -4,11 +4,13 @@
 #include "coordinatesystem.h"
 
 #include "interface.h"
+#include "robot.h"
 
 class World
 {
 private:
 	Interfaces* ifs;
+	Robot robot;
 public:
 	const CoordinateSystem base;
 	const double width;
@@ -18,6 +20,7 @@ public:
 
 	void reset(Interfaces&);
 	void tick();
+	void updateTime();
 };
 
 #endif // WORLD_H

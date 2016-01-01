@@ -7,6 +7,7 @@
 #include "constants.h"
 
 #include "lasersensor.h"
+#include "interface.h"
 
 class Robot : public Sphere
 {
@@ -14,6 +15,8 @@ private:
 	std::vector<LaserSensor> laserSensors;
 public:
     Robot(const CoordinateSystem* const, const Coordinate&, const double& radius=ROBOT_RADIUS, const std::string& laserConfigFile=LASER_CONFIG_FILE);
+	void move(Interface);
+	void updateSensors(Interface);
 };
 
 #endif // ROBOT_H

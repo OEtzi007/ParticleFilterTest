@@ -19,7 +19,6 @@ SOURCES	+= main.cpp\
 	laser.cpp \
 	lasersensor.cpp \
 	lasersensorinterface.cpp \
-	line.cpp \
 	map.cpp \
 	motoractuatorinterface.cpp \
 	object.cpp \
@@ -28,7 +27,9 @@ SOURCES	+= main.cpp\
 	sphere.cpp \
 	timeinterface.cpp \
 	vector.cpp \
+	wall.cpp \
 	world.cpp \
+	simulation.cpp \
 	simulatedtestrobot.cpp
 
 HEADERS	+= mainwindow.h \
@@ -39,7 +40,6 @@ HEADERS	+= mainwindow.h \
 	laser.h \
 	lasersensor.h \
 	lasersensorinterface.h \
-	line.h \
 	map.h \
 	motoractuatorinterface.h \
 	object.h \
@@ -48,7 +48,9 @@ HEADERS	+= mainwindow.h \
 	sphere.h \
 	timeinterface.h \
 	vector.h \
+	wall.h \
 	world.h \
+	simulation.h \
 	simulatedtestrobot.h
 
 FORMS	+= mainwindow.ui

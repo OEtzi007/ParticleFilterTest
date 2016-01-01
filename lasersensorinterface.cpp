@@ -3,11 +3,14 @@
 
 const double LaserSensorInterface::relSigmaL = REL_SIGMA_L;
 
-LaserSensorInterface::LaserSensorInterface()
+LaserSensorInterface::LaserSensorInterface():Interface(0,std::vector<std::string>()) //TODO remove this whole class
 {
-
 }
 
-std::vector<double> LaserSensorInterface::getSensorData() const{
+std::vector<double> LaserSensorInterface::getSensorData()
+{
+	laserInterfaceMutex.lock();
+
+	laserInterfaceMutex.unlock();
 	return std::vector<double>(); //TODO
 }

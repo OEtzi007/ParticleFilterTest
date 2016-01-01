@@ -8,11 +8,10 @@
 #ifndef ROBOTINTELLIGENCE_H_
 #define ROBOTINTELLIGENCE_H_
 
+#include <QThread>
 #include <vector>
 
-#include "lasersensorinterface.h"
-#include "motoractuatorinterface.h"
-#include "timeinterface.h"
+#include "interface.h"
 #include "simulatedtestrobot.h"
 #include "map.h"
 
@@ -22,17 +21,17 @@ struct Particle{
 	double weight;
 };
 
-class RobotIntelligence {
+class RobotIntelligence : public QThread {
 private:
-	LaserSensorInterface &laserData;
-	MotorActuatorInterface &motorData;
-	TimeInterface &timeData;
+	Interface* laserData;
+	Interface* motorData;
+	Interface* timeData;
 
 	Map map;
 	std::vector<Particle> particles;
 	SimulatedTestRobot myFriend;
 
-	void run();
+	void run() Q_DECL_OVERRIDE ;
 	void initParticles();
 	std::vector<double> readSensors();
 	void evalSensors();
@@ -45,10 +44,11 @@ private:
 	double random(const double, const double);
 	double gaussian(const double, const double, const double);
 public:
-	RobotIntelligence(LaserSensorInterface&, MotorActuatorInterface&, TimeInterface&);
+	RobotIntelligence(Interfaces&);
 	virtual ~RobotIntelligence();
 	void startRobot();
 	void stopRobot();
+	void reset(Interfaces&);
 };
 
 #endif /* ROBOTINTELLIGENCE_H_ */

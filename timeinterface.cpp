@@ -1,6 +1,6 @@
 #include "timeinterface.h"
 
-TimeInterface::TimeInterface()
+TimeInterface::TimeInterface(): Interface(0,std::vector<std::string>())	//TODO remove this whole class
 {
 
 }

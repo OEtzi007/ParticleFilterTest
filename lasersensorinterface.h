@@ -4,15 +4,19 @@
 #include "interface.h"
 
 #include <vector>
+#include <QtCore>
 
 class LaserSensorInterface : public Interface
 {
+private:
+	QWaitCondition busy;
+	QMutex laserInterfaceMutex;
 public:
 	static const double relSigmaL;
 
 	LaserSensorInterface();
 
-	std::vector<double> getSensorData() const;
+	std::vector<double> getSensorData();
 };
 
 #endif // LASERSENSORINTERFACE_H

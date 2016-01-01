@@ -6,7 +6,7 @@
 const double MotorActuatorInterface::relSigmaV = REL_SIGMA_V;
 const double MotorActuatorInterface::relSigmaOmega = REL_SIGMA_OMEGA;
 
-MotorActuatorInterface::MotorActuatorInterface()
+MotorActuatorInterface::MotorActuatorInterface(): Interface(0,std::vector<std::string>())	//TODO remove this whole class
 {
 
 }

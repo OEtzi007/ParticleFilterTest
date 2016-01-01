@@ -7,12 +7,18 @@
 
 class CoordinateSystem : public Coordinate
 {
-private:
-	CoordinateSystem* const base;
-	Vector axis[3];
 public:
-	CoordinateSystem(CoordinateSystem* const, const Coordinate&, const Vector&, const Vector&);
-	CoordinateSystem(CoordinateSystem* const, const Coordinate&, const Vector&);
+	Vector axes[3];
+
+	CoordinateSystem(const CoordinateSystem* const, Coordinate, Vector, Vector);
+	CoordinateSystem(const CoordinateSystem* const, Coordinate, Vector);
+	CoordinateSystem(const CoordinateSystem* const, Coordinate);
+
+	CoordinateSystem transform(const CoordinateSystem* const) const;
+
+	CoordinateSystem& moveAxes(Vector,Vector);
+	CoordinateSystem& moveAxes(Vector);
+	CoordinateSystem& moveAxes();
 };
 
 #endif // COORDINATESYSTEM_H

@@ -12,17 +12,22 @@
 
 const double PI=3.14159265359;
 const unsigned int NUM_PARTICLES=100;
+const double REL_SIGMA_V = 0.01;
+const double REL_SIGMA_OMEGA = 0.05;
 
 //MAP
-const double MAP_XORIGIN=0;
-const double MAP_YORIGIN=0;
-const double MAP_ZORIGIN=0;
+const double MAP_X_MIN=0;
+const double MAP_Y_MIN=0;
 const double MAP_WIDTH=5;
 const double MAP_HEIGHT=5;
 
 //ROBOT
-const double ROBOT_RADIUS=.15;
+const double ROBOT_RADIUS=0.15;
 const std::string LASER_CONFIG_FILE="2D_12.lcfg";
 
+//LASER
+const double LASER_RANGE=5.;
+const double REL_SIGMA_L=0.01;
+const double SIGMA_PHI=2.*PI/360.;
 
 #endif /* CONSTANTS_H_ */

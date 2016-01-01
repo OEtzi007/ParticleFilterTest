@@ -6,12 +6,13 @@
 class Vector : public Coordinate
 {
 public:
-	Vector(const double&, const double&, const double&);
-	Vector(const double&, const double&);
-	Vector();
+	Vector(const CoordinateSystem* const, const double& x=0, const double& y=0, const double& z=0);
+
+	Vector transform(const CoordinateSystem* const) const;
 
 	double length() const;
 
+	friend Vector operator+(const Vector&, const Vector&);
 	friend Coordinate operator+(const Coordinate&, const Vector&);
 	friend Coordinate operator+(const Vector&, const Coordinate&);
 	friend Vector operator*(const double&, const Vector&);

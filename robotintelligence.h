@@ -13,6 +13,8 @@
 #include "lasersensorinterface.h"
 #include "motoractuatorinterface.h"
 #include "timeinterface.h"
+#include "simulatedtestrobot.h"
+#include "map.h"
 
 struct Particle{
 	double x, y;
@@ -25,18 +27,23 @@ private:
 	LaserSensorInterface &laserData;
 	MotorActuatorInterface &motorData;
 	TimeInterface &timeData;
+
+	Map map;
 	std::vector<Particle> particles;
+	SimulatedTestRobot myFriend;
 
 	void run();
 	void initParticles();
 	std::vector<double> readSensors();
-	void evalSensors(std::vector<double>);
+	void evalSensors();
 	void resampling();
 	void estimatePosition();
+	double calcSigma() const;
 	void move();
-	void moveParticles();
+	void moveParticles(const double);
 	double random();
-	double random(double, double);
+	double random(const double, const double);
+	double gaussian(const double, const double, const double);
 public:
 	RobotIntelligence(LaserSensorInterface&, MotorActuatorInterface&, TimeInterface&);
 	virtual ~RobotIntelligence();

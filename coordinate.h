@@ -1,22 +1,23 @@
 #ifndef COORDINATE_H
 #define COORDINATE_H
 
+class CoordinateSystem;
 class Vector;
 
 class Coordinate
 {
 protected:
+	const CoordinateSystem* base;
+public:
 	double x;
 	double y;
 	double z;
-public:
-	Coordinate(const double&, const double&, const double&);
-	Coordinate(const double&, const double&);
-	Coordinate();
 
-	double getX() const;
-	double getY() const;
-	double getZ() const;
+	Coordinate(const CoordinateSystem* const, const double& x=0, const double& y=0, const double& z=0);
+
+	Coordinate transform(const CoordinateSystem* const) const;
+
+	const CoordinateSystem* getBase() const;
 
 	friend Vector operator-(const Coordinate&, const Coordinate&);
 	friend Coordinate operator+(const Coordinate&, const Vector&);

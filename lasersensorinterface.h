@@ -8,6 +8,8 @@
 class LaserSensorInterface : public Interface
 {
 public:
+	static const double relSigmaL;
+
 	LaserSensorInterface();
 
 	std::vector<double> getSensorData() const;

@@ -10,8 +10,6 @@
 
 #include <string>
 
-class CoordinateSystem;
-
 const double PI=3.14159265359;
 const unsigned int NUM_PARTICLES=100;
 

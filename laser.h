@@ -1,21 +1,17 @@
 #ifndef LASER_H
 #define LASER_H
 
-#include "coordinate.h"
-#include "vector.h"
+#include "coordinatesystem.h"
 
-class Laser
+class Laser : public CoordinateSystem
 {
-private:
-	Coordinate origin;
-	Vector direction;	//normed to length 1
 public:
 	static const double range;
+	static const double relSigmaL;
 
-	Laser(const Coordinate& origin, const Vector& direction);
-
-	Coordinate getOrigin() const;
-	Vector getDirection() const;
+	Laser(const CoordinateSystem* const, Coordinate, Vector, Vector);
+	Laser(const CoordinateSystem* const, Coordinate, Vector);
+	Laser(const CoordinateSystem* const, Coordinate);
 };
 
 #endif // LASER_H

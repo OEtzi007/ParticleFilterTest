@@ -28,9 +28,9 @@ private:
 	MotorActuatorInterface &motorData;
 	TimeInterface &timeData;
 
-    Map map;
+	Map map;
 	std::vector<Particle> particles;
-    SimulatedTestRobot myFriend;
+	SimulatedTestRobot myFriend;
 
 	void run();
 	void initParticles();
@@ -38,7 +38,7 @@ private:
 	void evalSensors();
 	void resampling();
 	void estimatePosition();
-	void calcSigma();
+	double calcSigma() const;
 	void move();
 	void moveParticles(const double);
 	double random();

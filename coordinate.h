@@ -15,7 +15,7 @@ public:
 
 	Coordinate(const CoordinateSystem* const, const double& x=0, const double& y=0, const double& z=0);
 
-	Coordinate& transform(const CoordinateSystem* const);
+	Coordinate transform(const CoordinateSystem* const) const;
 
 	const CoordinateSystem* getBase() const;
 

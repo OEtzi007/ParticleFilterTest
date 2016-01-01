@@ -8,7 +8,7 @@ class MotorActuatorInterface : public Interface
 {
 public:
     static const double relSigmaV;
-    static const double sigmaOmega;
+	static const double relSigmaOmega;
 
 	MotorActuatorInterface();
 

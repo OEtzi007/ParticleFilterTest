@@ -1,21 +1,26 @@
 /*
- * Line.cpp
+ * Wall.cpp
  *
  *  Created on: 27.12.2015
  *      Author: Marvin
  */
 
-#include "line.h"
+#include "wall.h"
 
 #include "laser.h"
 
-Line::Line(CoordinateSystem* const base, const Coordinate &start, const Coordinate &end):Object(CoordinateSystem(base,start,end-start)),start(start), end(end) {
+Wall::Wall(CoordinateSystem* const base, const Coordinate& origin, const Vector& normale):Object(CoordinateSystem(base,origin,normale))
+{
 }
 
-Line::~Line() {
+Wall::~Wall()
+{
+	// TODO Auto-generated destructor stub
 }
 
-double Line::evalLaser(const Laser &laser) const {
+double Wall::evalLaser(const Laser &laser) const
+{
+	CoordinateSystem copy(base.transform(&laser));
 	Vector lineDir = end-start;
 	if(lineDir.y*laser.getDirection().x == lineDir.x*laser.getDirection().y) {
 		return Laser::range;

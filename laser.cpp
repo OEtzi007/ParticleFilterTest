@@ -1,16 +1,21 @@
 #include "laser.h"
 
-const double Laser::range=5;
+#include "constants.h"
 
-Laser::Laser(const Coordinate& origin, const Vector& direction):origin(origin),direction(direction/direction.length())
+const double Laser::range=LASER_RANGE;
+const double Laser::relSigmaL=REL_SIGMA_L;
+
+Laser::Laser(const CoordinateSystem* const base, Coordinate origin, Vector xAxis, Vector yAxis) : CoordinateSystem(base, origin, xAxis, yAxis)
 {
 
 }
 
-Coordinate Laser::getOrigin() const{
-	return origin;
+Laser::Laser(const CoordinateSystem* const base, Coordinate origin, Vector xAxis) : CoordinateSystem(base, origin, xAxis)
+{
+
 }
 
-Vector Laser::getDirection() const{
-	return direction;
+Laser::Laser(const CoordinateSystem* const base, Coordinate origin) : CoordinateSystem(base, origin)
+{
+
 }

@@ -24,7 +24,6 @@ void RobotIntelligence::run() {
 	double lastTime = timeData.getTime();
 	//TODO laserDatafrequence
 	while(true) {
-		//TODO Mutex-Handling
 		double timeStep = timeData.getTime()-lastTime;
 		lastTime = timeData.getTime();
 		moveParticles(timeStep);
@@ -83,7 +82,7 @@ void RobotIntelligence::estimatePosition() { //TODO rethink function, highestWei
 	}
 }
 
-void RobotIntelligence::calcSigma() {
+double RobotIntelligence::calcSigma() const {
 	double totalWeight=0;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		totalWeight += particles[i].weight;
@@ -108,6 +107,8 @@ void RobotIntelligence::calcSigma() {
 	y_sigma_squared /= totalWeight;
 
 	double totalSigma = std::sqrt(x_sigma_squared+y_sigma_squared);
+
+	return totalSigma;
 }
 
 void RobotIntelligence::move() {
@@ -117,7 +118,7 @@ void RobotIntelligence::move() {
 void RobotIntelligence::moveParticles(const double timeStep) {
 	std::normal_distribution<double> v_x(motorData.getVelocity().x, MotorActuatorInterface::relSigmaV*motorData.getVelocity().x);
 	std::normal_distribution<double> v_y(motorData.getVelocity().y, MotorActuatorInterface::relSigmaV*motorData.getVelocity().y);
-	std::normal_distribution<double> omega(motorData.getOmega(), MotorActuatorInterface::sigmaOmega);
+	std::normal_distribution<double> omega(motorData.getOmega(), MotorActuatorInterface::relSigmaOmega*motorData.getOmega());
 	std::default_random_engine re;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle &curParticle = particles[i];

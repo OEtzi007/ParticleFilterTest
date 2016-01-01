@@ -31,7 +31,7 @@ double Sphere::evalLaser(const Laser& laser) const
 double Sphere::evalLaser(const Laser& laser) const
 {
 	Coordinate origin_c(base);
-	origin_c.transform(&laser);
+	origin_c=origin_c.transform(&laser);
 	double dist=sqrt(origin_c.y*origin_c.y+origin_c.z*origin_c.z);
 	if(dist>radius)
 		return laser.getRange();

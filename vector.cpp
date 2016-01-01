@@ -8,7 +8,6 @@ Vector::Vector(const CoordinateSystem* const base, const double &x, const double
 {
 }
 
-
 Vector Vector::transform(const CoordinateSystem* const toSystem) const
 {
 	if(toSystem==this->base)

@@ -9,8 +9,8 @@
 class Simulation : public QThread
 {
 private:
-	World world;
 	Interfaces ifs;
+	World world;
 	RobotIntelligence ai;
 
 	unsigned long long int ticks;

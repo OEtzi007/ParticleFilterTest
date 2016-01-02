@@ -4,9 +4,12 @@
 #include "lasersensor.h"
 #include "laser.h"
 
-Sphere::Sphere(World* const world, const CoordinateSystem * const base, const Coordinate& origin, const double& radius):Object(world, CoordinateSystem(base,origin)),radius(radius)
+Sphere::Sphere(World* const world, const CoordinateSystem * const refBase, const Coordinate& origin, const double& radius):
+	Object(world,
+		   CoordinateSystem(refBase,
+							origin)),
+	radius(radius)
 {
-
 }
 
 /* TODO remove

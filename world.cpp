@@ -2,15 +2,32 @@
 
 #include "constants.h"
 #include "laser.h"
+#include "wall.h"
 
-World::World() : time(0), timePerTick(TIME_PER_TICK), base(CoordinateSystem(0,Coordinate(0))), width(0), height(0), robot(this,&base, Coordinate(0)) //TODO
+World::World(Interfaces* const interfaces):
+	ifs(interfaces),
+	time(0),
+	objects(),
+	timePerTick(TIME_PER_TICK),
+	base(CoordinateSystem(CoordinateSystem::root,
+						  Coordinate(CoordinateSystem::root))),
+	width(MAP_WIDTH),
+	height(MAP_HEIGHT),
+	robot(this,
+		  &base,
+		  Coordinate(0)) //TODO
 {
+	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN),Vector(&base,1)));
+	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN),Vector(&base,0,1)));
+	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN+width,MAP_Y_MIN),Vector(&base,-1)));
+	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN+height),Vector(&base,0,-1)));
 }
 
 void World::reset(Interfaces& interfaces)
 {
 	time=0;
 	ifs=&interfaces;
+	robot.updateSensors(ifs->laserSensorI);
 }
 
 #include <iostream>	//TODO remove

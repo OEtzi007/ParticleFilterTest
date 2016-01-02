@@ -14,9 +14,10 @@
 
 class Wall: public Object {
 public:
-	Wall(World* const, CoordinateSystem* const, const Coordinate&, const Vector&);
+	Wall(World* const world, const CoordinateSystem* const refBase, const Coordinate& origin, const Vector& normale);
 	virtual ~Wall();
-	double evalLaser(const Laser&) const;
+
+	double evalLaser(const Laser& laser) const;
 };
 
 #endif /* WALL_H_ */

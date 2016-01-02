@@ -9,7 +9,11 @@
 #include "lasersensor.h"
 #include "motoractuator.h"
 
-Robot::Robot(World* const world, const CoordinateSystem* const base, const Coordinate & origin, const double &radius, const std::string &laserConfigFile):Sphere(world,base,origin,radius)
+Robot::Robot(World* const world, const CoordinateSystem* const refBase, const Coordinate & origin, const double &radius, const std::string &laserConfigFile):
+	Sphere(world,
+		   refBase,
+		   origin,
+		   radius)
 {
 	std::ifstream lcfg(laserConfigFile);
 	int n;
@@ -25,10 +29,10 @@ Robot::Robot(World* const world, const CoordinateSystem* const base, const Coord
 	}
 }
 
-void Robot::move(Interface& motorData) {
-	std::normal_distribution<double> v_x(motorData.getData("vx"), MotorActuator::relSigmaV*motorData.getData("vx"));
-	std::normal_distribution<double> v_y(motorData.getData("vy"), MotorActuator::relSigmaV*motorData.getData("vy"));
-	std::normal_distribution<double> omega(motorData.getData("omega"), MotorActuator::relSigmaOmega*motorData.getData("omega"));
+void Robot::move(Interface& actuatorInterface) {
+	std::normal_distribution<double> v_x(actuatorInterface.getData("vx"), MotorActuator::relSigmaV*actuatorInterface.getData("vx"));
+	std::normal_distribution<double> v_y(actuatorInterface.getData("vy"), MotorActuator::relSigmaV*actuatorInterface.getData("vy"));
+	std::normal_distribution<double> omega(actuatorInterface.getData("omega"), MotorActuator::relSigmaOmega*actuatorInterface.getData("omega"));
 
 	double s_x = v_x(RANDOM_ENGINE)*TIME_PER_TICK;
 	double s_y = v_y(RANDOM_ENGINE)*TIME_PER_TICK;
@@ -39,10 +43,10 @@ void Robot::move(Interface& motorData) {
 	this->base.moveAxes(Vector(&this->base, std::cos(delOri), std::sin(delOri)));
 }
 
-void Robot::updateSensors(Interface& laserData) const{
+void Robot::updateSensors(Interface& sensorInterface) const{
 	std::vector<double> measurements;
 	for(unsigned int i=0;i<laserSensors.size();++i){
 		measurements.push_back(laserSensors[i].getMeasurement());
 	}
-	laserData.setData(measurements);
+	sensorInterface.setData(measurements);
 }

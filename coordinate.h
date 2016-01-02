@@ -7,15 +7,15 @@ class Vector;
 class Coordinate
 {
 protected:
-	const CoordinateSystem* base;
+	const CoordinateSystem* refBase;
 public:
 	double x;
 	double y;
 	double z;
 
-	Coordinate(const CoordinateSystem* const, const double& x=0, const double& y=0, const double& z=0);
+	Coordinate(const CoordinateSystem* const refBase, const double& x=0, const double& y=0, const double& z=0);
 
-	Coordinate transform(const CoordinateSystem* const) const;
+	Coordinate transform(const CoordinateSystem* const toSystem) const;
 
 	const CoordinateSystem* getBase() const;
 

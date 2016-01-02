@@ -8,9 +8,9 @@ class Sphere : public Object
 {
 	double radius;
 public:
-	Sphere(World* const, const CoordinateSystem* const, const Coordinate&, const double&);
+	Sphere(World* const world, const CoordinateSystem* const refBase, const Coordinate& origin, const double& radius);
 
-	double evalLaser(const Laser&) const;
+	double evalLaser(const Laser& laser) const;
 };
 
 #endif // SPHERE_H

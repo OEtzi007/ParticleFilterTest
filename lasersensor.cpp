@@ -10,7 +10,11 @@ const double LaserSensor::relSigmaL=LASER_REL_SIGMA_L;
 const double LaserSensor::sigmaTheta=LASER_SIGMA_THETA;
 const double LaserSensor::errorProbability=LASER_ERROR_PROBABILITY;
 
-LaserSensor::LaserSensor(World* const world, const CoordinateSystem* const base, const Coordinate& origin, const Vector& direction):Object(world,CoordinateSystem(base,origin,direction))
+LaserSensor::LaserSensor(World* const world, const CoordinateSystem* const refBase, const Coordinate& origin, const Vector& direction):
+	Object(world,
+		   CoordinateSystem(refBase,
+							origin,
+							direction))
 {
 
 }

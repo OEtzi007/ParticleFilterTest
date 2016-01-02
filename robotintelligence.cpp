@@ -13,7 +13,13 @@
 #include "map.h"
 #include "motoractuator.h"
 
-RobotIntelligence::RobotIntelligence(Interfaces& interfaces):laserData(&interfaces.laserSensorI), motorData(&interfaces.motorActuatorI), timeData(&interfaces.timeI), myFriend(SimulatedTestRobot(&map,&map.base, Coordinate(&map.base)))
+RobotIntelligence::RobotIntelligence(Interfaces& interfaces):
+	laserData(&interfaces.laserSensorI),
+	motorData(&interfaces.motorActuatorI),
+	timeData(&interfaces.timeI),
+	simulatedRobot(SimulatedTestRobot(&map,
+									  &map.base,
+									  Coordinate(&map.base)))
 {
 }
 
@@ -45,8 +51,8 @@ void RobotIntelligence::evalSensors()
 	std::vector<double> sensorData(laserData->getAllData());
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle &curParticle = particles[i];
-		myFriend.set(curParticle.x, curParticle.y, curParticle.ori);
-		std::vector<double> particleDistances = myFriend.getNonErrorDistances();
+		simulatedRobot.set(curParticle.x, curParticle.y, curParticle.ori);
+		std::vector<double> particleDistances = simulatedRobot.getNonErrorDistances();
 		for(unsigned int j=0; j<sensorData.size(); j++) {
 			curParticle.weight *= gaussian(sensorData[j], particleDistances[j], LaserSensor::relSigmaL*particleDistances[j]);
 		}
@@ -124,7 +130,7 @@ void RobotIntelligence::move()
 {
 }
 
-void RobotIntelligence::moveParticles(double timeStep)
+void RobotIntelligence::moveParticles(const double& timeStep)
 {
 	std::normal_distribution<double> v_x(motorData->getData("vx"), MotorActuator::relSigmaV*motorData->getData("vx"));
 	std::normal_distribution<double> v_y(motorData->getData("vy"), MotorActuator::relSigmaV*motorData->getData("vy"));
@@ -166,13 +172,13 @@ double RobotIntelligence::random()
 	return unif(RANDOM_ENGINE);
 }
 
-double RobotIntelligence::random(const double lower_bound, const double upper_bound)
+double RobotIntelligence::random(const double& lower_bound, const double& upper_bound)
 {
 	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
 	return unif(RANDOM_ENGINE);
 }
 
-double RobotIntelligence::gaussian(const double x, const double mean, const double sigma)
+double RobotIntelligence::gaussian(const double& x, const double& mean, const double& sigma)
 {
 	if(sigma == 0)
 		return x==mean ? 1 : 0;

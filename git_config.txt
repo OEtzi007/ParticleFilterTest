@@ -7,7 +7,6 @@
 	logallrefupdates = true
 [remote "origin"]
 	url = https://github.com/OEtzi007/ParticleFilterTest.git
-
 	fetch = +refs/heads/*:refs/remotes/origin/*
 [branch "master"]
 	remote = origin
@@ -19,7 +18,3 @@
 	merge = refs/heads/develop
 	rebase = true
 	mergeOptions = --no-ff
-[branch "feature-debugging"]
-	remote = origin
-	merge = refs/heads/feature-debugging
-	rebase = true

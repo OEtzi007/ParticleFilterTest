@@ -2,7 +2,7 @@
 
 #include <cassert>	//TODO assert
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #include <iostream>

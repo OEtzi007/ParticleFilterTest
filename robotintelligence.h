@@ -46,8 +46,6 @@ private:
 public:
 	RobotIntelligence(Interfaces& interfaces);
 	virtual ~RobotIntelligence();
-	void startRobot();
-	void stopRobot();
 	void reset(Interfaces& interfaces);
 };
 

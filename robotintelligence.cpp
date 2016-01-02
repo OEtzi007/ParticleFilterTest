@@ -40,8 +40,7 @@ void RobotIntelligence::run()
 		moveParticles(timeStep);
 		evalSensors();
 
-		estimatePosition(); //TODO returnValue
-		calcSigma(); //TOOD returnValue
+		estimatePosition();
 		resampling();
 
 		move();
@@ -54,7 +53,7 @@ void RobotIntelligence::evalSensors()
 	std::vector<double> log_gaussians;
 	double max_log_gaussians=-std::numeric_limits<double>::max();
 	for(unsigned int i=0; i<NUM_PARTICLES; ++i) {
-		simulatedRobot.set(particles[i].x, particles[i].y, particles[i].ori);
+		simulatedRobot.set(particles[i].x, particles[i].y, particles[i].phi);
 		std::vector<double> particleDistances = simulatedRobot.getNonErrorDistances();
 		double cur_log_gaussians=std::log(particles[i].weight);
 		for(unsigned int j=0; j<sensorData.size(); ++j) {
@@ -99,20 +98,22 @@ void RobotIntelligence::resampling() //TODO implement more efficient (resampling
 #endif
 void RobotIntelligence::estimatePosition()
 { //TODO rethink function, highestWeight best approximation?
-	double highestWeight = particles[0].weight;
-	Particle bestParticle = particles[0]; // after for-loop this represents the robot's most likely position
+	estimatedPosition = particles[0]; // after for-loop this represents the robot's most likely position
 	for(unsigned int i=1; i<NUM_PARTICLES; i++) {
-		if (particles[i].weight > highestWeight) {
-			highestWeight = particles[i].weight;
-			bestParticle = particles[i];
+		if (particles[i].weight > estimatedPosition.weight) {
+			estimatedPosition = particles[i];
 		}
 	}
+	calcEstimationErrors();
 #ifdef DEBUG
-	std::cout << "Robot thinks at time " << timeData->getData("time") << ":\tx=" << bestParticle.x << "\ty=" << bestParticle.y << "\tori=" << bestParticle.ori << std::endl;
+	std::cout << "Robot thinks at time " << timeData->getData("time") <<
+				 ":\tx=" << estimatedPosition.x << "+-" << estimationError.x <<
+				 "\ty=" << estimatedPosition.y << "+-" << estimationError.y <<
+				 "\tori=" << estimatedPosition.phi << "+-" << estimationError.phi << std::endl;
 #endif
 }
 
-double RobotIntelligence::calcSigma() const
+void RobotIntelligence::calcEstimationErrors()
 {
 	double totalWeight=0;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
@@ -121,25 +122,32 @@ double RobotIntelligence::calcSigma() const
 
 	double x_mean = 0;
 	double y_mean = 0;
+	double phi_mean = 0;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		x_mean += particles[i].weight*particles[i].x;
 		y_mean += particles[i].weight*particles[i].y;
+		phi_mean += particles[i].weight*particles[i].phi;
 	}
 	x_mean /= totalWeight;
 	y_mean /= totalWeight;
+	phi_mean /= totalWeight;
 
 	double x_sigma_squared = 0;
 	double y_sigma_squared = 0;
+	double phi_sigma_squared = 0;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		x_sigma_squared += particles[i].weight * (particles[i].x-x_mean)*(particles[i].x-x_mean);
 		y_sigma_squared += particles[i].weight * (particles[i].y-y_mean)*(particles[i].y-y_mean);
+		phi_sigma_squared += particles[i].weight * (particles[i].phi-phi_mean)*(particles[i].phi-phi_mean);
 	}
 	x_sigma_squared /= totalWeight;
 	y_sigma_squared /= totalWeight;
+	phi_sigma_squared /= totalWeight;
 
-	double totalSigma = std::sqrt(x_sigma_squared+y_sigma_squared);
-
-	return totalSigma;
+	estimationError.x=std::sqrt(x_sigma_squared);
+	estimationError.y=std::sqrt(y_sigma_squared);
+	estimationError.phi=std::sqrt(phi_sigma_squared);
+	estimationError.weight=1;	//NOTE not relevant
 }
 
 void RobotIntelligence::move()
@@ -155,15 +163,15 @@ void RobotIntelligence::moveParticles(const double& timeStep)
 		Particle &curParticle = particles[i];
 		double s_x = v_x(RANDOM_ENGINE)*timeStep;
 		double s_y = v_y(RANDOM_ENGINE)*timeStep;
-		double delx=cos(curParticle.ori)*s_x;
-		double dely=sin(curParticle.ori)*s_x;
-		delx-=sin(curParticle.ori)*s_y;
-		dely+=cos(curParticle.ori)*s_y;
+		double delx=cos(curParticle.phi)*s_x;
+		double dely=sin(curParticle.phi)*s_x;
+		delx-=sin(curParticle.phi)*s_y;
+		dely+=cos(curParticle.phi)*s_y;
 		curParticle.x+=delx;
 		curParticle.y+=dely;
-		curParticle.ori+=omega(RANDOM_ENGINE)*timeStep;
-		while(curParticle.ori >= 2*PI) { //modulo function for double's
-			curParticle.ori -= 2*PI;
+		curParticle.phi+=omega(RANDOM_ENGINE)*timeStep;
+		while(curParticle.phi >= 2*PI) { //modulo function for double's
+			curParticle.phi -= 2*PI;
 		}
 	}
 }
@@ -174,7 +182,7 @@ void RobotIntelligence::initParticles()
 		Particle curParticle;
 		curParticle.x=random(0,map.width)+map.base.x;
 		curParticle.y=random(0,map.height)+map.base.y;
-		curParticle.ori=random(0,2*PI);
+		curParticle.phi=random(0,2*PI);
 		curParticle.weight=1;
 		particles.push_back(curParticle);
 	}

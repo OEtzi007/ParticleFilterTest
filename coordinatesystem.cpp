@@ -1,11 +1,10 @@
 #include "coordinatesystem.h"
 
-#include <cassert>	//TODO assert
-
 //#define DEBUG
 
 #ifdef DEBUG
-#include <iostream>
+#include <cassert>	//NOTE assert
+#include <iostream>	//NOTE io
 #endif
 
 bool CoordinateSystem::rootExists=false;
@@ -17,16 +16,18 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem * const refBase, const
 		 Vector(refBase),
 		 Vector(refBase)}
 {
-	if(refBase==0){
-		assert(!rootExists);	//TODO assert
-		rootExists=true;
 #ifdef DEBUG
-		std::cout << "root pointer is:\t" << this << std::endl;
-#endif
+	if(refBase==0){
+		assert(!rootExists);	//NOTE assert
+		rootExists=true;
+		std::cout << "root pointer is:\t" << this << std::endl;	//NOTE io
 	}
+#endif
+
 	moveAxes(xAxis,yAxis);
 
 #ifdef DEBUG
+	//NOTE io whole section
 	const CoordinateSystem* cur=this;
 	while(cur){
 		std::cout << cur << std::endl << "|" << std::endl << "V" << std::endl;
@@ -42,16 +43,18 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem* const refBase, const 
 		 Vector(refBase),
 		 Vector(refBase)}
 {
-	if(refBase==0){
-		assert(!rootExists);	//TODO assert
-		rootExists=true;
 #ifdef DEBUG
-		std::cout << "root pointer is:\t" << this << std::endl;
-#endif
+	if(refBase==0){
+		assert(!rootExists);	//NOTE assert
+		rootExists=true;
+		std::cout << "root pointer is:\t" << this << std::endl;	//NOTE io
 	}
+#endif
+
 	moveAxes(xAxis);
 
 #ifdef DEBUG
+	//NOTE io whole section
 	const CoordinateSystem* cur=this;
 	while(cur){
 		std::cout << cur << std::endl << "|" << std::endl << "V" << std::endl;
@@ -67,16 +70,18 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem* const refBase, const 
 		 Vector(refBase),
 		 Vector(refBase)}
 {
-	if(refBase==0){
-		assert(!rootExists);	//TODO assert
-		rootExists=true;
 #ifdef DEBUG
-		std::cout << "root pointer is:\t" << this << std::endl;
-#endif
+	if(refBase==0){
+		assert(!rootExists);	//NOTE assert
+		rootExists=true;
+		std::cout << "root pointer is:\t" << this << std::endl;	//NOTE io
 	}
+#endif
+
 	moveAxes();
 
 #ifdef DEBUG
+	//NOTE io whole section
 	const CoordinateSystem* cur=this;
 	while(cur){
 		std::cout << cur << std::endl << "|" << std::endl << "V" << std::endl;
@@ -88,10 +93,12 @@ CoordinateSystem::CoordinateSystem(const CoordinateSystem* const refBase, const 
 
 CoordinateSystem::~CoordinateSystem()
 {
+#ifdef DEBUG
 	if(refBase==0){
-		assert(rootExists);	//TODO assert
+		assert(rootExists);	//NOTE assert
 		rootExists=false;
 	}
+#endif
 }
 
 CoordinateSystem CoordinateSystem::transform(const CoordinateSystem* const toSystem) const

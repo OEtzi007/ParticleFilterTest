@@ -15,7 +15,7 @@ void Simulation::run()
 	initProcess();
 
 	ai.start();
-	//ai.wait();
+
 	while(ticks<100000)	//TODO add a finish line
 	{
 		world.tick();

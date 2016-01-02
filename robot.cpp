@@ -3,7 +3,6 @@
 #include <fstream>
 #include <cmath>
 #include <random>
-#include <iostream>	//TODO remove
 
 #include "vector.h"
 #include "lasersensor.h"
@@ -18,7 +17,6 @@ Robot::Robot(World* const world, const CoordinateSystem* const refBase, const Co
 	std::ifstream lcfg(laserConfigFile);
 	int n;
 	lcfg >> n;
-	//std::cout << n << std::endl;	//TODO remove
 	for(int i=0;i<n;i++){
 		double phi;
 		lcfg >> phi;

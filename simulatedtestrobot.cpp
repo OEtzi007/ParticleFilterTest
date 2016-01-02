@@ -13,7 +13,7 @@ SimulatedTestRobot::SimulatedTestRobot(World* const world, const CoordinateSyste
 }
 
 std::vector<double> SimulatedTestRobot::getNonErrorDistances() const{
-	return std::vector<double>();	//TODO
+	return std::vector<double>();	//FIXME kakuro
 }
 
 void SimulatedTestRobot::set(const double& x, const double& y, const double& phi) {

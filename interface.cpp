@@ -1,13 +1,17 @@
 #include "interface.h"
 
-#include <cassert>	//TODO assert
+#ifdef DEBUG
+#include <cassert>	//NOTE assert
+#endif
 
 Interface::Interface(const unsigned int& size, const std::vector<std::string>& dataNames):
 	data(size),
 	mappedNames(),
 	size(size)
 {
-	assert(dataNames.size()==size);	//TODO assert
+#ifdef DEBUG
+	assert(dataNames.size()==size);	//NOTE assert
+#endif
 	for(unsigned int i=0;i<size;i++)
 		mappedNames.insert({dataNames[i],i});
 }
@@ -26,7 +30,9 @@ Interface::~Interface()
 void Interface::setData(const std::vector<double>& data)
 {
 	dataLocker.lock();
-	assert(data.size()==size);	//TODO assert
+#ifdef DEBUG
+	assert(data.size()==size);	//NOTE assert
+#endif
 	this->data=data;
 	dataLocker.unlock();
 }

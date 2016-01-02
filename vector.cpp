@@ -1,7 +1,9 @@
 #include "vector.h"
 
 #include <cmath>
-#include <cassert>	//TODO
+#ifdef DEBUG
+#include <cassert>	//NOTE assert
+#endif
 #include "coordinatesystem.h"
 
 Vector::Vector(const CoordinateSystem* const refBase, const double &x, const double &y, const double &z):
@@ -49,19 +51,23 @@ Vector Vector::transform(const CoordinateSystem* const toSystem) const
 		return result.transform(toSystem);
 	} else {	//go up the transformation tree
 		const CoordinateSystem* const localToSystem=this->refBase->getBase();
+#ifdef DEBUG
 		if(localToSystem==0){	//this actually shouldn't happen, so assert
-			assert(localToSystem==0);	//TODO assert
+			assert(localToSystem==0);	//NOTE assert
 			Vector result(*this);
 			result.refBase=preSystem;	//if above happens, this could fix correctly
 			return result.transform(toSystem);
 		}
+#endif
 		//one line for transformation
 		Vector result=this->x*this->refBase->axes[0]+this->y*this->refBase->axes[1]+this->z*this->refBase->axes[2];
 
 		return result.transform(toSystem);
 	}
-	assert(false);	//TODO assert
+#ifdef DEBUG
+	assert(false);	//NOTE assert
 	return Vector(toSystem);
+#endif
 }
 
 double Vector::length() const

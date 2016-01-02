@@ -38,8 +38,8 @@ void RobotIntelligence::run()
 		moveParticles(timeStep);
 		evalSensors();
 
-		estimatePosition(); //TODO Rückgabewert
-		calcSigma(); //TODO Rückgabewert
+		estimatePosition(); //TODO returnValue
+		calcSigma(); //TODO returnValue
 		resampling();
 
 		move();
@@ -82,7 +82,9 @@ void RobotIntelligence::resampling()
 	particles = newParticles;
 }
 
-#include <iostream>	//TODO remove
+#ifdef DEBUG
+#include <iostream>
+#endif
 void RobotIntelligence::estimatePosition()
 { //TODO rethink function, highestWeight best approximation?
 	double highestWeight = 0;
@@ -93,7 +95,9 @@ void RobotIntelligence::estimatePosition()
 			bestParticle = particles[i];
 		}
 	}
-	std::cout << "Robot thinks at time " << timeData->getData("time") << ":\tx=" << bestParticle.x << "\ty=" << bestParticle.y << "\tori=" << bestParticle.ori << std::endl;	//TODO remove
+#ifdef DEBUG
+	std::cout << "Robot thinks at time " << timeData->getData("time") << ":\tx=" << bestParticle.x << "\ty=" << bestParticle.y << "\tori=" << bestParticle.ori << std::endl;
+#endif
 }
 
 double RobotIntelligence::calcSigma() const

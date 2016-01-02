@@ -14,15 +14,15 @@ void Simulation::run()
 {
 	initProcess();
 
-	//ai.start();
-	//ai.wait();
+	ai.start();
+
 	while(ticks<100000)	//TODO add a finish line
 	{
 		world.tick();
 		++ticks;
 	}
 
-	//ai.quit();
+	ai.quit();
 }
 
 void Simulation::initProcess()

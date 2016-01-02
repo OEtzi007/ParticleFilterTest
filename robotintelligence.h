@@ -17,7 +17,7 @@
 
 struct Particle{
 	double x, y;
-	double ori;
+	double phi;
 	double weight;
 };
 
@@ -29,6 +29,8 @@ private:
 
 	Map map;
 	std::vector<Particle> particles;
+	Particle estimatedPosition;
+	Particle estimationError;
 	SimulatedTestRobot simulatedRobot;
 
 	void run() Q_DECL_OVERRIDE ;
@@ -37,7 +39,7 @@ private:
 	void evalSensors();
 	void resampling();
 	void estimatePosition();
-	double calcSigma() const;
+	void calcEstimationErrors();
 	void move();
 	void moveParticles(const double& timeStep);
 	double random(const double& lower_bound, const double& upper_bound) const;

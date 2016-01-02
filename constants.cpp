@@ -1,5 +1,6 @@
 #include "constants.h"
 
 #include <random>
+#include <ctime>
 
-std::default_random_engine RANDOM_ENGINE(1);
+std::default_random_engine RANDOM_ENGINE(time(0));

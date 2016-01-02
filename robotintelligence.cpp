@@ -9,6 +9,7 @@
 
 #include <random>
 #include <cassert>
+#include <limits>
 #include "constants.h"
 #include "map.h"
 #include "motoractuator.h"
@@ -50,13 +51,23 @@ void RobotIntelligence::run()
 void RobotIntelligence::evalSensors()
 {
 	std::vector<double> sensorData(laserData->getAllData());
-	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
-		Particle &curParticle = particles[i];
-		simulatedRobot.set(curParticle.x, curParticle.y, curParticle.ori);
+	std::vector<double> log_gaussians;
+	double max_log_gaussians=-std::numeric_limits<double>::max();
+	for(unsigned int i=0; i<NUM_PARTICLES; ++i) {
+		simulatedRobot.set(particles[i].x, particles[i].y, particles[i].ori);
 		std::vector<double> particleDistances = simulatedRobot.getNonErrorDistances();
-		for(unsigned int j=0; j<sensorData.size(); j++) {
-			curParticle.weight *= gaussian(sensorData[j], particleDistances[j], LaserSensor::relSigmaL*particleDistances[j]);
+		double cur_log_gaussians=std::log(particles[i].weight);
+		for(unsigned int j=0; j<sensorData.size(); ++j) {
+			cur_log_gaussians += log_gaussian(sensorData[j],
+											  particleDistances[j],
+											  LaserSensor::relSigmaL*particleDistances[j]);
 		}
+		log_gaussians.push_back(cur_log_gaussians);
+		if(max_log_gaussians<cur_log_gaussians)
+			max_log_gaussians=cur_log_gaussians;
+	}
+	for(unsigned int i=0;i<NUM_PARTICLES;++i){
+		particles[i].weight=std::exp(log_gaussians[i]-max_log_gaussians);
 	}
 }
 
@@ -88,9 +99,9 @@ void RobotIntelligence::resampling() //TODO implement more efficient (resampling
 #endif
 void RobotIntelligence::estimatePosition()
 { //TODO rethink function, highestWeight best approximation?
-	double highestWeight = -1;
-	Particle bestParticle; // after for-loop this represents the robot's most likely position
-	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
+	double highestWeight = particles[0].weight;
+	Particle bestParticle = particles[0]; // after for-loop this represents the robot's most likely position
+	for(unsigned int i=1; i<NUM_PARTICLES; i++) {
 		if (particles[i].weight > highestWeight) {
 			highestWeight = particles[i].weight;
 			bestParticle = particles[i];
@@ -175,7 +186,7 @@ double RobotIntelligence::random(const double& lower_bound, const double& upper_
 	return unif(RANDOM_ENGINE);
 }
 
-double RobotIntelligence::gaussian(const double& x, const double& mean, const double& sigma) const
+double RobotIntelligence::log_gaussian(const double& x, const double& mean, const double& sigma) const
 {
 #ifdef DEBUG
 	assert(sigma != 0);	//NOTE assert
@@ -186,7 +197,8 @@ double RobotIntelligence::gaussian(const double& x, const double& mean, const do
 	*/
 	double expNumerator = -(x-mean)*(x-mean);
 	double expDenominator = 2*sigma*sigma;
-	return std::exp(expNumerator/expDenominator)/(sigma*std::sqrt(2*PI));
+	double log_gauss=expNumerator/expDenominator-std::log(sigma*sigma*2*PI)/2;
+	return log_gauss;
 }
 
 void RobotIntelligence::reset(Interfaces& interfaces)

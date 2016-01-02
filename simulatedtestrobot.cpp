@@ -17,7 +17,7 @@ std::vector<double> SimulatedTestRobot::getNonErrorDistances() const{
 	for(unsigned int i=0;i<laserSensors.size();++i){
 		distances.push_back(laserSensors[i].getNonErrorMeasurement());
 	}
-	return std::vector<double>(laserSensors.size(),1);
+	return distances;
 }
 
 void SimulatedTestRobot::set(const double& x, const double& y, const double& phi) {

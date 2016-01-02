@@ -11,7 +11,8 @@
 
 class Robot : public Sphere
 {
-private:
+//private:
+protected: //TODO private or protected?
 	std::vector<LaserSensor> laserSensors;
 public:
 	Robot(World* const world, const CoordinateSystem* const refBase, const Coordinate& origin, const double& radius=ROBOT_RADIUS, const std::string& laserConfigFile=LASER_CONFIG_FILE);

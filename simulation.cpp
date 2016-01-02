@@ -14,7 +14,7 @@ void Simulation::run()
 {
 	initProcess();
 
-	//ai.start();
+	ai.start();
 	//ai.wait();
 	while(ticks<100000)	//TODO add a finish line
 	{
@@ -22,7 +22,7 @@ void Simulation::run()
 		++ticks;
 	}
 
-	//ai.quit();
+	ai.quit();
 }
 
 void Simulation::initProcess()

@@ -13,8 +13,21 @@ SimulatedTestRobot::SimulatedTestRobot(World* const world, const CoordinateSyste
 }
 
 std::vector<double> SimulatedTestRobot::getNonErrorDistances() const{
-	return std::vector<double>();	//TODO
+	std::vector<double> distances;
+	for(unsigned int i=0;i<laserSensors.size();++i){
+		distances.push_back(laserSensors[i].getNonErrorMeasurement());
+	}
+	return distances;
 }
+
+/*double LaserSensor::getNonErrorMeasurement() const //TODO remove
+{
+	//use sphere coordinates
+	Vector direction(&this->base,1,0,0);
+	Laser laser(&this->base,this->base,direction,range);
+	double exactMeasure=world->evalLaser(laser);
+	return result;
+}*/
 
 void SimulatedTestRobot::set(const double& x, const double& y, const double& phi) {
 	this->base.x=x;

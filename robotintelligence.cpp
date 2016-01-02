@@ -180,8 +180,13 @@ double RobotIntelligence::random(const double& lower_bound, const double& upper_
 
 double RobotIntelligence::gaussian(const double& x, const double& mean, const double& sigma)
 {
+#ifdef DEBUG
+	assert(sigma != 0);	//NOTE assert
+#endif
+	/*
 	if(sigma == 0)
 		return x==mean ? 1 : 0;
+	*/
 	double expNumerator = -std::pow(2, x-mean);
 	double expDenominator = 2* std::pow(2, sigma);
 	return std::exp(expNumerator/expDenominator)/(sigma*std::sqrt(2*PI));

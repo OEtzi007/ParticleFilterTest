@@ -28,18 +28,19 @@ RobotIntelligence::~RobotIntelligence()
 }
 
 void RobotIntelligence::run()
-{
+{	//TODO move into one methode particleFilter
 	initParticles();
 	double lastTime = timeData->getData("time");
 	//TODO laserDatafrequence
 	while(true) {
-		double timeStep = timeData->getData("time")-lastTime;
-		lastTime = timeData->getData("time");
+		double curTime=timeData->getData("time");
+		double timeStep = curTime-lastTime;
+		lastTime = curTime;
 		moveParticles(timeStep);
 		evalSensors();
 
 		estimatePosition(); //TODO returnValue
-		calcSigma(); //TODO returnValue
+		calcSigma(); //TOOD returnValue
 		resampling();
 
 		move();
@@ -59,7 +60,7 @@ void RobotIntelligence::evalSensors()
 	}
 }
 
-void RobotIntelligence::resampling()
+void RobotIntelligence::resampling() //TODO implement more efficient (resampling wheel)
 {
 	double totalWeight=0;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
@@ -73,8 +74,8 @@ void RobotIntelligence::resampling()
 		for(unsigned int j=0; j<NUM_PARTICLES; j++) { //check for every Particle if it should copy
 			curWeight += particles[j].weight;
 			if(curRand <= curWeight) {
-				newParticles.push_back(Particle(particles[j]));
-				newParticles[newParticles.size()-1].weight = 1;
+				newParticles.push_back(particles[j]);
+				newParticles.back().weight=1;
 				break;
 			}
 		}
@@ -87,7 +88,7 @@ void RobotIntelligence::resampling()
 #endif
 void RobotIntelligence::estimatePosition()
 { //TODO rethink function, highestWeight best approximation?
-	double highestWeight = 0;
+	double highestWeight = -1;
 	Particle bestParticle; // after for-loop this represents the robot's most likely position
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		if (particles[i].weight > highestWeight) {
@@ -119,8 +120,8 @@ double RobotIntelligence::calcSigma() const
 	double x_sigma_squared = 0;
 	double y_sigma_squared = 0;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
-		x_sigma_squared += particles[i].weight * std::pow(particles[i].x-x_mean, 2);
-		y_sigma_squared += particles[i].weight * std::pow(particles[i].y-y_mean, 2);
+		x_sigma_squared += particles[i].weight * (particles[i].x-x_mean)*(particles[i].x-x_mean);
+		y_sigma_squared += particles[i].weight * (particles[i].y-y_mean)*(particles[i].y-y_mean);
 	}
 	x_sigma_squared /= totalWeight;
 	y_sigma_squared /= totalWeight;
@@ -149,7 +150,7 @@ void RobotIntelligence::moveParticles(const double& timeStep)
 		dely+=cos(curParticle.ori)*s_y;
 		curParticle.x+=delx;
 		curParticle.y+=dely;
-		curParticle.ori=curParticle.ori+omega(RANDOM_ENGINE)*timeStep;
+		curParticle.ori+=omega(RANDOM_ENGINE)*timeStep;
 		while(curParticle.ori >= 2*PI) { //modulo function for double's
 			curParticle.ori -= 2*PI;
 		}
@@ -160,29 +161,21 @@ void RobotIntelligence::initParticles()
 {
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		Particle curParticle;
-		curParticle.x=random()*map.width+map.base.x;
-		curParticle.y=random()*map.height+map.base.y;
-		curParticle.ori=random()*2*PI;
+		curParticle.x=random(0,map.width)+map.base.x;
+		curParticle.y=random(0,map.height)+map.base.y;
+		curParticle.ori=random(0,2*PI);
 		curParticle.weight=1;
 		particles.push_back(curParticle);
 	}
 }
 
-double RobotIntelligence::random()
-{
-	double lower_bound = 0;
-	double upper_bound = 1;
-	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
-	return unif(RANDOM_ENGINE);
-}
-
-double RobotIntelligence::random(const double& lower_bound, const double& upper_bound)
+double RobotIntelligence::random(const double& lower_bound, const double& upper_bound) const
 {
 	std::uniform_real_distribution<double> unif(lower_bound,upper_bound);
 	return unif(RANDOM_ENGINE);
 }
 
-double RobotIntelligence::gaussian(const double& x, const double& mean, const double& sigma)
+double RobotIntelligence::gaussian(const double& x, const double& mean, const double& sigma) const
 {
 #ifdef DEBUG
 	assert(sigma != 0);	//NOTE assert
@@ -191,8 +184,8 @@ double RobotIntelligence::gaussian(const double& x, const double& mean, const do
 	if(sigma == 0)
 		return x==mean ? 1 : 0;
 	*/
-	double expNumerator = -std::pow(2, x-mean);
-	double expDenominator = 2* std::pow(2, sigma);
+	double expNumerator = -(x-mean)*(x-mean);
+	double expDenominator = 2*sigma*sigma;
 	return std::exp(expNumerator/expDenominator)/(sigma*std::sqrt(2*PI));
 }
 

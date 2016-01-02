@@ -15,7 +15,9 @@ World::World(Interfaces* const interfaces):
 	height(MAP_HEIGHT),
 	robot(this,
 		  &base,
-		  Coordinate(0)) //TODO place the robot according to config file
+		  Coordinate(&base,
+					 2.5,
+					 2.5)) //TODO place the robot according to config file
 {
 	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN),Vector(&base,1)));
 	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN),Vector(&base,0,1)));
@@ -40,7 +42,7 @@ void World::tick()
 	robot.updateSensors(ifs->laserSensorI);
 	updateTime();
 #ifdef DEBUG
-	std::cout << "World knows at time " << time << ":\tx=" << robot.getBase().x << "\ty=" << robot.getBase().y << "\tori=" << atan2(robot.getBase().axes[0].y, robot.getBase().axes[0].x) << std::endl;
+	//std::cout << "World knows at time " << time << ":\tx=" << robot.getBase().x << "\ty=" << robot.getBase().y << "\tori=" << atan2(robot.getBase().axes[0].y, robot.getBase().axes[0].x) << std::endl;
 #endif
 }
 

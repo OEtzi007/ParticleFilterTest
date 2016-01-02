@@ -42,7 +42,6 @@ double LaserSensor::getMeasurement() const
 
 double LaserSensor::getNonErrorMeasurement() const //TODO remove later
 {
-	//use sphere coordinates
 	Vector direction(&this->base,1,0,0);
 	Laser laser(&this->base,this->base,direction,range);
 	double exactMeasure=world->evalLaser(laser);

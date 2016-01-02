@@ -17,20 +17,12 @@ std::vector<double> SimulatedTestRobot::getNonErrorDistances() const{
 	for(unsigned int i=0;i<laserSensors.size();++i){
 		distances.push_back(laserSensors[i].getNonErrorMeasurement());
 	}
-	return distances;
+	return std::vector<double>(laserSensors.size(),1);
 }
-
-/*double LaserSensor::getNonErrorMeasurement() const //TODO remove
-{
-	//use sphere coordinates
-	Vector direction(&this->base,1,0,0);
-	Laser laser(&this->base,this->base,direction,range);
-	double exactMeasure=world->evalLaser(laser);
-	return result;
-}*/
 
 void SimulatedTestRobot::set(const double& x, const double& y, const double& phi) {
 	this->base.x=x;
 	this->base.y=y;
+	this->base.z=0;
 	this->base.moveAxes(Vector(this->base.getBase(), std::cos(phi), std::sin(phi)));
 }

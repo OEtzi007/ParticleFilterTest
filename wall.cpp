@@ -32,7 +32,11 @@ double Wall::evalLaser(const Laser &laser) const
 		}
 	}
 
-	double intersectionLength=((this->base-Coordinate(this->base.getBase()))*this->base.axes[0])/(laser.axes[0]*this->base.axes[0]);
+	Vector w= this->base-laser;
+	Vector n= this->base.axes[0];
+	Vector x= laser.axes[0];
+
+	double intersectionLength=(w*n)/(x*n);
 	if(intersectionLength<0 || intersectionLength>laser.getRange()) {
 		return laser.getRange();
 	}

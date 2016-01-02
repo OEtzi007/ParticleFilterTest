@@ -8,7 +8,7 @@ class Laser : public CoordinateSystem
 private:
 	double range;
 public:
-	Laser(const CoordinateSystem* const, const Coordinate&, const Vector&, const double&);
+	Laser(const CoordinateSystem* const refBase, const Coordinate& origin, const Vector& direction, const double& range);
 
 	double getRange() const;
 };

@@ -1,6 +1,8 @@
 #include "laser.h"
 
-Laser::Laser(const CoordinateSystem* const base, const Coordinate& origin, const Vector& xAxis, const double& range) : CoordinateSystem(base, origin, xAxis) , range(range)
+Laser::Laser(const CoordinateSystem* const refBase, const Coordinate& origin, const Vector& direction, const double& range):
+	CoordinateSystem(refBase, origin, direction),
+	range(range)
 {
 }
 

@@ -4,26 +4,30 @@
 #include <cassert>	//TODO
 #include "coordinatesystem.h"
 
-Vector::Vector(const CoordinateSystem* const base, const double &x, const double &y, const double &z):Coordinate(base,x,y,z)
+Vector::Vector(const CoordinateSystem* const refBase, const double &x, const double &y, const double &z):
+	Coordinate(refBase,
+			   x,
+			   y,
+			   z)
 {
 }
 
 Vector Vector::transform(const CoordinateSystem* const toSystem) const
 {
-	if(toSystem==this->base)
+	if(toSystem==this->refBase)
 		return *this;
 	bool goDownTransformTree=false;
 	const CoordinateSystem* preSystem=toSystem;
 	const CoordinateSystem* curSystem=preSystem->getBase();
 	while(curSystem){
-		if(curSystem==this->base){
+		if(curSystem==this->refBase){
 			goDownTransformTree=true;
 			break;
 		}
 		preSystem=curSystem;
 		curSystem=preSystem->getBase();
 	}
-	if(goDownTransformTree || this->base==0){	//go down the transform tree
+	if(goDownTransformTree || this->refBase==0){	//go down the transform tree
 		const CoordinateSystem* const localToSystem=preSystem;
 		Vector transformedAxes[3]={Vector(localToSystem,
 								   localToSystem->axes[0].x,
@@ -44,15 +48,15 @@ Vector Vector::transform(const CoordinateSystem* const toSystem) const
 
 		result.transform(toSystem);
 	} else {	//go up the transformation tree
-		const CoordinateSystem* const localToSystem=this->base->getBase();
+		const CoordinateSystem* const localToSystem=this->refBase->getBase();
 		if(localToSystem==0){	//this actually shouldn't happen, so assert
 			assert(localToSystem==0);	//TODO assert
 			Vector result(*this);
-			result.base=preSystem;	//if above happens, this could fix correctly
+			result.refBase=preSystem;	//if above happens, this could fix correctly
 			return result.transform(toSystem);
 		}
 		//one line for transformation
-		Vector result=this->x*this->base->axes[0]+this->y*this->base->axes[1]+this->z*this->base->axes[2];
+		Vector result=this->x*this->refBase->axes[0]+this->y*this->refBase->axes[1]+this->z*this->refBase->axes[2];
 
 		return result.transform(toSystem);
 	}
@@ -67,19 +71,19 @@ double Vector::length() const
 
 Vector operator+(const Vector& a, const Vector& b)
 {
-	Vector b_=b.transform(a.base);
-	return Vector(a.base,a.x+b_.x,a.y+b_.y,a.z+b_.z);
+	Vector b_=b.transform(a.refBase);
+	return Vector(a.refBase,a.x+b_.x,a.y+b_.y,a.z+b_.z);
 }
 
 Coordinate operator+(const Coordinate& coo, const Vector& vec)
 {
-	Vector vec_=vec.transform(coo.base);
+	Vector vec_=vec.transform(coo.refBase);
 	return Coordinate(coo.getBase(),coo.x+vec_.x,coo.y+vec_.y,coo.z+vec_.z);
 }
 
 Coordinate operator+(const Vector& vec, const Coordinate& coo)
 {
-	Vector vec_=vec.transform(coo.base);
+	Vector vec_=vec.transform(coo.refBase);
 	return Coordinate(coo.getBase(),coo.x+vec_.x,coo.y+vec_.y,coo.z+vec_.z);
 }
 

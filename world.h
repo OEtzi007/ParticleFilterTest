@@ -19,15 +19,15 @@ public:
 	const double width;
 	const double height;
 private:
-	Robot robot;
+	Robot robot;	//TODO include to object list
 public:
-	World();
+	World(Interfaces* const interfaces);
 
-	void reset(Interfaces&);
+	void reset(Interfaces& interfaces);
 	void tick();
 	void updateTime();
 
-	double evalLaser(const Laser&) const;
+	double evalLaser(const Laser& laser) const;
 };
 
 #endif // WORLD_H

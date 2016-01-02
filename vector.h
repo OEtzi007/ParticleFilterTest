@@ -6,9 +6,9 @@
 class Vector : public Coordinate
 {
 public:
-	Vector(const CoordinateSystem* const, const double& x=0, const double& y=0, const double& z=0);
+	Vector(const CoordinateSystem* const refBase, const double& x=0, const double& y=0, const double& z=0);
 
-	Vector transform(const CoordinateSystem* const) const;
+	Vector transform(const CoordinateSystem* const toSystem) const;
 
 	double length() const;
 

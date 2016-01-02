@@ -4,26 +4,26 @@
 #include "vector.h"
 #include "coordinatesystem.h"
 
-Coordinate::Coordinate(const CoordinateSystem* const base, const double &x, const double &y, const double &z):base(base),x(x),y(y),z(z)
+Coordinate::Coordinate(const CoordinateSystem* const refBase, const double &x, const double &y, const double &z):refBase(refBase),x(x),y(y),z(z)
 {
 }
 
 Coordinate Coordinate::transform(const CoordinateSystem* const toSystem) const
 {
-	if(toSystem==this->base)
+	if(toSystem==this->refBase)
 		return *this;
 	bool goDownTransformTree=false;
 	const CoordinateSystem* preSystem=toSystem;
-	const CoordinateSystem* curSystem=preSystem->base;
+	const CoordinateSystem* curSystem=preSystem->refBase;
 	while(curSystem){
-		if(curSystem==this->base){
+		if(curSystem==this->refBase){
 			goDownTransformTree=true;
 			break;
 		}
 		preSystem=curSystem;
-		curSystem=preSystem->base;
+		curSystem=preSystem->refBase;
 	}
-	if(goDownTransformTree || this->base==0){	//go down the transform tree
+	if(goDownTransformTree || this->refBase==0){	//go down the transform tree
 		const CoordinateSystem* const localToSystem=preSystem;
 		Vector transformedAxes[3]={Vector(localToSystem,
 								   localToSystem->axes[0].x,
@@ -44,16 +44,16 @@ Coordinate Coordinate::transform(const CoordinateSystem* const toSystem) const
 
 		return result.transform(toSystem);
 	} else {	//go up the transformation tree
-		const CoordinateSystem* const localToSystem=this->base->base;
+		const CoordinateSystem* const localToSystem=this->refBase->refBase;
 		if(localToSystem==0){	//this actually shouldn't happen, so assert
 			assert(localToSystem==0);	//TODO assert
 			Coordinate result(*this);
-			result.base=preSystem;	//if above happens, this could fix correctly
+			result.refBase=preSystem;	//if above happens, this could fix correctly
 			return result.transform(toSystem);
 		}
 		//two lines for transformation
-		Coordinate result(localToSystem,this->base->x,this->base->y,this->base->z);
-		result=result+this->x*this->base->axes[0]+this->y*this->base->axes[1]+this->z*this->base->axes[2];
+		Coordinate result(localToSystem,this->refBase->x,this->refBase->y,this->refBase->z);
+		result=result+this->x*this->refBase->axes[0]+this->y*this->refBase->axes[1]+this->z*this->refBase->axes[2];
 
 		return result.transform(toSystem);
 	}
@@ -63,10 +63,10 @@ Coordinate Coordinate::transform(const CoordinateSystem* const toSystem) const
 
 const CoordinateSystem* Coordinate::getBase() const
 {
-	return base;
+	return refBase;
 }
 
 Vector operator-(const Coordinate& a, const Coordinate& b){
-	Coordinate a_=a.transform(b.base);
-	return Vector(b.base,a_.x-b.x,a_.y-b.y,a_.z-b.z);
+	Coordinate a_=a.transform(b.refBase);
+	return Vector(b.refBase,a_.x-b.x,a_.y-b.y,a_.z-b.z);
 }

@@ -9,9 +9,9 @@ public:
 	static const double relSigmaV;
 	static const double relSigmaOmega;
 
-	MotorActuator(World* const, const CoordinateSystem* const, const Coordinate&);
+	MotorActuator(World* const world, const CoordinateSystem* const refBase, const Coordinate& origin);
 
-	double evalLaser(const Laser&) const;
+	double evalLaser(const Laser& laser) const;
 };
 
 #endif // MOTORACTUATOR_H

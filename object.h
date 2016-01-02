@@ -12,9 +12,9 @@ protected:
 	World* const world;
 	CoordinateSystem base;
 public:
-	Object(World* const, const CoordinateSystem&);
+	Object(World* const world, const CoordinateSystem& base);
 	virtual ~Object();
-	virtual double evalLaser(const Laser&) const = 0;
+	virtual double evalLaser(const Laser& laser) const = 0;
 
 	const CoordinateSystem& getBase() const;
 };

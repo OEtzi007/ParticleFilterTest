@@ -15,13 +15,13 @@ private:
 public:
 	const unsigned int size;
 
-	Interface(const unsigned int&, const std::vector<std::string>&);
-	Interface(const Interface&);
+	Interface(const unsigned int& size, const std::vector<std::string>& dataNames);
+	Interface(const Interface& interface);
 	virtual ~Interface();
 
-	void setData(const std::vector<double>&);
+	void setData(const std::vector<double>& data);
 	std::vector<double> getAllData();
-	double getData(const std::string&);
+	double getData(const std::string& dataName);
 };
 
 struct Interfaces

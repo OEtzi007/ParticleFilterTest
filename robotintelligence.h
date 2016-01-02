@@ -29,7 +29,7 @@ private:
 
 	Map map;
 	std::vector<Particle> particles;
-	SimulatedTestRobot myFriend;
+	SimulatedTestRobot simulatedRobot;
 
 	void run() Q_DECL_OVERRIDE ;
 	void initParticles();
@@ -39,16 +39,16 @@ private:
 	void estimatePosition();
 	double calcSigma() const;
 	void move();
-	void moveParticles(const double);
+	void moveParticles(const double& timeStep);
 	double random();
-	double random(const double, const double);
-	double gaussian(const double, const double, const double);
+	double random(const double& lower_bound, const double& upper_bound);
+	double gaussian(const double& x, const double& mean, const double& sigma);
 public:
-	RobotIntelligence(Interfaces&);
+	RobotIntelligence(Interfaces& interfaces);
 	virtual ~RobotIntelligence();
 	void startRobot();
 	void stopRobot();
-	void reset(Interfaces&);
+	void reset(Interfaces& interfaces);
 };
 
 #endif /* ROBOTINTELLIGENCE_H_ */

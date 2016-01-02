@@ -13,10 +13,10 @@ public:
 	static const double sigmaTheta;
 	static const double errorProbability;
 
-	LaserSensor(World* const, const CoordinateSystem* const, const Coordinate&, const Vector&);
+	LaserSensor(World* const world, const CoordinateSystem* const refBase, const Coordinate& origin, const Vector& direction);
 
 	double getMeasurement() const;
-	double evalLaser(const Laser&) const;
+	double evalLaser(const Laser& laser) const;
 };
 
 #endif // LASERSENSOR_H

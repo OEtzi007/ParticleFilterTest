@@ -16,13 +16,14 @@ World::World(Interfaces* const interfaces):
 	robot(this,
 		  &base,
 		  Coordinate(&base,
-					 2.5,
-					 2.5)) //TODO place the robot according to config file
+					 1,
+					 3)) //TODO place the robot according to config file
 {
 	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN),Vector(&base,1)));
 	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN),Vector(&base,0,1)));
 	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN+width,MAP_Y_MIN),Vector(&base,-1)));
 	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN+height),Vector(&base,0,-1)));
+	objects.push_back(new Sphere(this,&base,Coordinate(&base,2,3),0.5));	//TODO use map config file
 }
 
 void World::reset(Interfaces& interfaces)

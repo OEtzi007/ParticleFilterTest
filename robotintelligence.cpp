@@ -34,19 +34,20 @@ void RobotIntelligence::run()
 	double lastTime = timeData->getData("time");
 	//TODO laserDatafrequence
 	while(true) {
+		estimatePosition();
+		move();
+
+		evalSensors();
+		resampling();
+
 		double curTime=timeData->getData("time");
 		double timeStep = curTime-lastTime;
 		lastTime = curTime;
+
 		moveParticles(timeStep);
-		evalSensors();
-
-		estimatePosition();
-		resampling();
-
-		move();
 	}
 }
-
+#include <iostream>	//TODO remove
 void RobotIntelligence::evalSensors()
 {
 	std::vector<double> sensorData(laserData->getAllData());
@@ -65,9 +66,23 @@ void RobotIntelligence::evalSensors()
 		if(max_log_gaussians<cur_log_gaussians)
 			max_log_gaussians=cur_log_gaussians;
 	}
+	double sum_weights=0;
 	for(unsigned int i=0;i<NUM_PARTICLES;++i){
 		particles[i].weight=std::exp(log_gaussians[i]-max_log_gaussians);
+		sum_weights+=particles[i].weight;
 	}
+	std::vector<double> weights;	//TODO remove
+	for(unsigned int i=0;i<NUM_PARTICLES;++i){
+		particles[i].weight/=sum_weights;
+		weights.push_back(particles[i].weight);
+	}
+	/*
+	std::sort(weights.rbegin(),weights.rend());	//TODO remove
+	for(unsigned int i=0;i<NUM_PARTICLES;++i){
+		std::cout << weights[i] << "\t";	//TODO remove
+	}
+	std::cout << std::endl;	//TODO remove
+	*/
 }
 
 void RobotIntelligence::resampling() //TODO implement more efficient (resampling wheel)
@@ -123,14 +138,17 @@ void RobotIntelligence::calcEstimationErrors()
 	double x_mean = 0;
 	double y_mean = 0;
 	double phi_mean = 0;
+	double cos_phi_mean=0;
+	double sin_phi_mean=0;
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		x_mean += particles[i].weight*particles[i].x;
 		y_mean += particles[i].weight*particles[i].y;
-		phi_mean += particles[i].weight*particles[i].phi;
+		cos_phi_mean += particles[i].weight*cos(particles[i].phi);
+		sin_phi_mean += particles[i].weight*sin(particles[i].phi);
 	}
 	x_mean /= totalWeight;
 	y_mean /= totalWeight;
-	phi_mean /= totalWeight;
+	phi_mean = atan2(sin_phi_mean,cos_phi_mean);
 
 	double x_sigma_squared = 0;
 	double y_sigma_squared = 0;
@@ -138,7 +156,12 @@ void RobotIntelligence::calcEstimationErrors()
 	for(unsigned int i=0; i<NUM_PARTICLES; i++) {
 		x_sigma_squared += particles[i].weight * (particles[i].x-x_mean)*(particles[i].x-x_mean);
 		y_sigma_squared += particles[i].weight * (particles[i].y-y_mean)*(particles[i].y-y_mean);
-		phi_sigma_squared += particles[i].weight * (particles[i].phi-phi_mean)*(particles[i].phi-phi_mean);
+		double cur_phi_err=particles[i].phi-phi_mean;
+		while(cur_phi_err>=PI)
+			cur_phi_err-=2*PI;
+		while(cur_phi_err<-PI)
+			cur_phi_err+=2*PI;
+		phi_sigma_squared += particles[i].weight * cur_phi_err*cur_phi_err;
 	}
 	x_sigma_squared /= totalWeight;
 	y_sigma_squared /= totalWeight;
@@ -170,9 +193,28 @@ void RobotIntelligence::moveParticles(const double& timeStep)
 		curParticle.x+=delx;
 		curParticle.y+=dely;
 		curParticle.phi+=omega(RANDOM_ENGINE)*timeStep;
+
+		//add random error so that particles are diverse even if there is no movement
+		double xerr=estimationError.x/2.;
+		double yerr=estimationError.y/2.;
+		double phierr=estimationError.phi/2.;
+		/*
+		if(xerr<0.001)
+			xerr=0.001;
+		if(yerr<0.001)
+			yerr=0.001;
+		if(phierr<2*PI/1000)
+			phierr=2*PI/1000;
+		*/
+		curParticle.x=std::normal_distribution<double>(curParticle.x,xerr)(RANDOM_ENGINE);
+		curParticle.y=std::normal_distribution<double>(curParticle.y,yerr)(RANDOM_ENGINE);
+		curParticle.phi=std::normal_distribution<double>(curParticle.phi,phierr)(RANDOM_ENGINE);
+
 		while(curParticle.phi >= 2*PI) { //modulo function for double's
 			curParticle.phi -= 2*PI;
 		}
+		while(curParticle.phi < 0)
+			curParticle.phi += 2*PI;
 	}
 }
 

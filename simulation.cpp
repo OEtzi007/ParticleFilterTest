@@ -24,11 +24,13 @@ void Simulation::run()
 	{
 		world.tick();
 #ifdef DEBUG
-		/*std::cout << "simulation laser data:" << std::endl;	//NOTE io section
+		/*
+		std::cout << "simulation laser data:" << std::endl;	//NOTE io section
 		std::vector<double> curData = ifs.laserSensorI.getAllData();
 		for(unsigned int i=0; i<curData.size(); ++i)
 			std::cout << curData[i] << std::endl;
-		std::cout << std::endl;*/
+		std::cout << std::endl;
+		*/
 #endif
 		++ticks;
 	}

@@ -40,9 +40,8 @@ private:
 	double calcSigma() const;
 	void move();
 	void moveParticles(const double& timeStep);
-	double random();
-	double random(const double& lower_bound, const double& upper_bound);
-	double gaussian(const double& x, const double& mean, const double& sigma);
+	double random(const double& lower_bound, const double& upper_bound) const;
+	double log_gaussian(const double& x, const double& mean, const double& sigma) const;
 public:
 	RobotIntelligence(Interfaces& interfaces);
 	virtual ~RobotIntelligence();

@@ -13,11 +13,16 @@ SimulatedTestRobot::SimulatedTestRobot(World* const world, const CoordinateSyste
 }
 
 std::vector<double> SimulatedTestRobot::getNonErrorDistances() const{
-	return std::vector<double>();	//TODO
+	std::vector<double> distances;
+	for(unsigned int i=0;i<laserSensors.size();++i){
+		distances.push_back(laserSensors[i].getNonErrorMeasurement());
+	}
+	return distances;
 }
 
 void SimulatedTestRobot::set(const double& x, const double& y, const double& phi) {
 	this->base.x=x;
 	this->base.y=y;
+	this->base.z=0;
 	this->base.moveAxes(Vector(this->base.getBase(), std::cos(phi), std::sin(phi)));
 }

@@ -16,6 +16,7 @@ public:
 	LaserSensor(World* const world, const CoordinateSystem* const refBase, const Coordinate& origin, const Vector& direction);
 
 	double getMeasurement() const;
+	double getNonErrorMeasurement() const; //TODO remove later to simulatedSensor
 	double evalLaser(const Laser& laser) const;
 };
 

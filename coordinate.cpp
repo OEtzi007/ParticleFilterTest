@@ -1,6 +1,8 @@
 #include "coordinate.h"
 
-#include <cassert>	//TODO
+#ifdef DEBUG
+#include <cassert>	//NOTE assert
+#endif
 #include "vector.h"
 #include "coordinatesystem.h"
 
@@ -45,20 +47,24 @@ Coordinate Coordinate::transform(const CoordinateSystem* const toSystem) const
 		return result.transform(toSystem);
 	} else {	//go up the transformation tree
 		const CoordinateSystem* const localToSystem=this->refBase->refBase;
+#ifdef DEBUG
 		if(localToSystem==0){	//this actually shouldn't happen, so assert
-			assert(localToSystem==0);	//TODO assert
+			assert(localToSystem==0);	//NOTE assert
 			Coordinate result(*this);
 			result.refBase=preSystem;	//if above happens, this could fix correctly
 			return result.transform(toSystem);
 		}
+#endif
 		//two lines for transformation
 		Coordinate result(localToSystem,this->refBase->x,this->refBase->y,this->refBase->z);
 		result=result+this->x*this->refBase->axes[0]+this->y*this->refBase->axes[1]+this->z*this->refBase->axes[2];
 
 		return result.transform(toSystem);
 	}
-	assert(false);	//TODO assert
+#ifdef DEBUG
+	assert(false);	//NOTE assert
 	return Coordinate(toSystem);
+#endif
 }
 
 const CoordinateSystem* Coordinate::getBase() const

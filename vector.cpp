@@ -46,7 +46,7 @@ Vector Vector::transform(const CoordinateSystem* const toSystem) const
 		Vector result(localToSystem,this->x,this->y,this->z);
 		result=result.x*transformedAxes[0]+result.y*transformedAxes[1]+result.z*transformedAxes[2];
 
-		result.transform(toSystem);
+		return result.transform(toSystem);
 	} else {	//go up the transformation tree
 		const CoordinateSystem* const localToSystem=this->refBase->getBase();
 		if(localToSystem==0){	//this actually shouldn't happen, so assert

@@ -31,13 +31,15 @@ const double ROBOT_RADIUS=0.15;
 const std::string LASER_CONFIG_FILE="2D_12.lcfg";
 
 //SIMULATION
-const double TIME_PER_TICK = 0.001;
+const double TIME_PER_TICK = 0.0001;
+const unsigned int TOTAL_TICKS = 1000000;
 
 //LASER
 const double LASER_RANGE=5.;
 const double LASER_REL_SIGMA_L=0.01;
 const double LASER_SIGMA_THETA=2.*PI/360.;
 const double LASER_ERROR_PROBABILITY=0.01;
+const double LASER_MEASUREMENT_FREQUENCE=50.;	//Hertz
 
 //MOTOR
 const double REL_SIGMA_V = 0.01;

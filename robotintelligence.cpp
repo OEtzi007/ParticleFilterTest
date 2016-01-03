@@ -31,14 +31,16 @@ RobotIntelligence::~RobotIntelligence()
 void RobotIntelligence::run()
 {	//TODO move into one methode particleFilter
 	initParticles();
+	//TODO initMove();
+	move();
 	double lastTime = timeData->getData("time");
 	//TODO laserDatafrequence
 	while(true) {
-		estimatePosition();
-		move();
-
 		evalSensors();
 		resampling();
+
+		estimatePosition();
+		move();
 
 		double curTime=timeData->getData("time");
 		double timeStep = curTime-lastTime;
@@ -174,7 +176,10 @@ void RobotIntelligence::calcEstimationErrors()
 }
 
 void RobotIntelligence::move()
-{
+{	//TODO do something thoughtfull, not turning in circles
+	motorData->setData("vx",0);
+	motorData->setData("vy",0);
+	motorData->setData("omega",0);
 }
 
 void RobotIntelligence::moveParticles(const double& timeStep)
@@ -195,17 +200,22 @@ void RobotIntelligence::moveParticles(const double& timeStep)
 		curParticle.phi+=omega(RANDOM_ENGINE)*timeStep;
 
 		//add random error so that particles are diverse even if there is no movement
-		double xerr=estimationError.x/2.;
-		double yerr=estimationError.y/2.;
-		double phierr=estimationError.phi/2.;
-		/*
-		if(xerr<0.001)
-			xerr=0.001;
-		if(yerr<0.001)
-			yerr=0.001;
-		if(phierr<2*PI/1000)
-			phierr=2*PI/1000;
-		*/
+		double q=100.;	//TODO change	//NOTE with correct error estimation q should be 1.
+										//check for different particles, 999 A and 1 B particle doesn't mean, we know that we are at point A, but that there are missing particles inbetween the space of A and B, so derive error formula maybe with a two dimensional gaussian
+		double xerr=estimationError.x*q;
+		double yerr=estimationError.y*q;
+		double phierr=estimationError.phi*q;
+
+		//TODO if we count somewhere else different particles, this isn't necessary anymore
+		//TODO maybe better use initParticles
+		//TODO different methods initParticles (maybe with preconditions like we know where we start on map) and initRandomParticles (with no preconditions what-so-ever) then use here initRandomParticles
+		if(xerr==0)
+			xerr=1;
+		if(yerr==0)
+			yerr=1;
+		if(phierr==0)
+			phierr=PI;
+
 		curParticle.x=std::normal_distribution<double>(curParticle.x,xerr)(RANDOM_ENGINE);
 		curParticle.y=std::normal_distribution<double>(curParticle.y,yerr)(RANDOM_ENGINE);
 		curParticle.phi=std::normal_distribution<double>(curParticle.phi,phierr)(RANDOM_ENGINE);
@@ -226,6 +236,10 @@ void RobotIntelligence::initParticles()
 		curParticle.y=random(0,map.height)+map.base.y;
 		curParticle.phi=random(0,2*PI);
 		curParticle.weight=1;
+		//TODO remove
+		curParticle.x=4;
+		curParticle.y=2;
+		curParticle.phi=0;
 		particles.push_back(curParticle);
 	}
 }

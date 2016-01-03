@@ -19,7 +19,8 @@ public:
 	Interface(const Interface& interface);
 	virtual ~Interface();
 
-	void setData(const std::vector<double>& data);
+	void setAllData(const std::vector<double>& data);
+	void setData(const std::string& dataName, const double& data);
 	std::vector<double> getAllData();
 	double getData(const std::string& dataName);
 };

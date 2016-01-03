@@ -23,7 +23,7 @@ World::World(Interfaces* const interfaces):
 	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN),Vector(&base,0,1)));
 	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN+width,MAP_Y_MIN),Vector(&base,-1)));
 	objects.push_back(new Wall(this,&base,Coordinate(&base,MAP_X_MIN,MAP_Y_MIN+height),Vector(&base,0,-1)));
-	objects.push_back(new Sphere(this,&base,Coordinate(&base,2,3),0.5));	//TODO use map config file
+	objects.push_back(new Sphere(this,&base,Coordinate(&base,2,3),0.25));	//TODO use map config file
 }
 
 void World::reset(Interfaces& interfaces)
@@ -43,12 +43,12 @@ void World::tick()
 	robot.updateSensors(ifs->laserSensorI);
 	updateTime();
 #ifdef DEBUG
-	//std::cout << "World knows at time " << time << ":\tx=" << robot.getBase().x << "\ty=" << robot.getBase().y << "\tori=" << atan2(robot.getBase().axes[0].y, robot.getBase().axes[0].x) << std::endl;
+	std::cout << "World knows at time " << time << ":\tx=" << robot.getBase().x << "\ty=" << robot.getBase().y << "\tori=" << atan2(robot.getBase().axes[0].y, robot.getBase().axes[0].x) << std::endl;
 #endif
 }
 
 void World::updateTime() {
-	ifs->timeI.setData({time});
+	ifs->timeI.setData("time",time);
 }
 
 double World::evalLaser(const Laser& laser) const
@@ -60,4 +60,9 @@ double World::evalLaser(const Laser& laser) const
 			minMeasurement=curMeasurement;
 	}
 	return minMeasurement;
+}
+
+double World::getTime() const
+{
+	return time;
 }

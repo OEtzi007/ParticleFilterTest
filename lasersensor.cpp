@@ -9,6 +9,7 @@ const double LaserSensor::range=LASER_RANGE;
 const double LaserSensor::relSigmaL=LASER_REL_SIGMA_L;
 const double LaserSensor::sigmaTheta=LASER_SIGMA_THETA;
 const double LaserSensor::errorProbability=LASER_ERROR_PROBABILITY;
+const double LaserSensor::measurementFrequence=LASER_MEASUREMENT_FREQUENCE;
 
 LaserSensor::LaserSensor(World* const world, const CoordinateSystem* const refBase, const Coordinate& origin, const Vector& direction):
 	Object(world,
@@ -19,8 +20,13 @@ LaserSensor::LaserSensor(World* const world, const CoordinateSystem* const refBa
 
 }
 
-double LaserSensor::getMeasurement() const
+double LaserSensor::getMeasurement()
 {
+	double curTime=world->getTime();
+	if(curTime-lastTimeMeasurement<1./measurementFrequence)
+		return lastMeasurement;
+	else
+		lastTimeMeasurement=curTime;
 	//use sphere coordinates
 	double theta=std::normal_distribution<double>(0,sigmaTheta)(RANDOM_ENGINE);
 	theta=std::abs(theta);
@@ -34,10 +40,12 @@ double LaserSensor::getMeasurement() const
 		exactMeasure=laser.getRange();
 	else
 		exactMeasure=world->evalLaser(laser);
-	double result=std::normal_distribution<double>(exactMeasure,exactMeasure*relSigmaL)(RANDOM_ENGINE);
-	if(result<0)
-		return 0;
-	return result;
+	lastMeasurement=std::normal_distribution<double>(exactMeasure,exactMeasure*relSigmaL)(RANDOM_ENGINE);
+	if(lastMeasurement<0){
+		lastMeasurement=0;
+		return lastMeasurement;
+	}
+	return lastMeasurement;
 }
 
 double LaserSensor::getNonErrorMeasurement() const //TODO remove later

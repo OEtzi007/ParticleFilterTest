@@ -27,13 +27,20 @@ Interface::~Interface()
 {
 }
 
-void Interface::setData(const std::vector<double>& data)
+void Interface::setAllData(const std::vector<double>& data)
 {
 	dataLocker.lock();
 #ifdef DEBUG
 	assert(data.size()==size);	//NOTE assert
 #endif
 	this->data=data;
+	dataLocker.unlock();
+}
+
+void Interface::setData(const std::string& dataName, const double& data)
+{
+	dataLocker.lock();
+	this->data[mappedNames.at(dataName)]=data;
 	dataLocker.unlock();
 }
 

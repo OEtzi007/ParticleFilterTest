@@ -16,7 +16,7 @@ protected:
 public:
 	Robot(World* const world, const CoordinateSystem* const refBase, const Coordinate& origin, const double& radius=ROBOT_RADIUS, const std::string& laserConfigFile=LASER_CONFIG_FILE);
 	void move(Interface& actuatorInterface);
-	void updateSensors(Interface& sensorInterface) const;
+	void updateSensors(Interface& sensorInterface);
 };
 
 #endif // ROBOT_H

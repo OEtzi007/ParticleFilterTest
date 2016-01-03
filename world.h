@@ -28,6 +28,8 @@ public:
 	void updateTime();
 
 	double evalLaser(const Laser& laser) const;
+
+	double getTime() const;
 };
 
 #endif // WORLD_H

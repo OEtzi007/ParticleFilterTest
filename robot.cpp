@@ -41,10 +41,10 @@ void Robot::move(Interface& actuatorInterface) {
 	this->base.moveAxes(Vector(&this->base, std::cos(delOri), std::sin(delOri)));
 }
 
-void Robot::updateSensors(Interface& sensorInterface) const{
+void Robot::updateSensors(Interface& sensorInterface){
 	std::vector<double> measurements;
 	for(unsigned int i=0;i<laserSensors.size();++i){
 		measurements.push_back(laserSensors[i].getMeasurement());
 	}
-	sensorInterface.setData(measurements);
+	sensorInterface.setAllData(measurements);
 }

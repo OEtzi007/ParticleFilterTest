@@ -20,7 +20,7 @@ void Simulation::run()
 
 	ai.start();
 
-	while(ticks<100000)	//TODO add a finish line
+	while(ticks<TOTAL_TICKS)	//TODO add a finish line
 	{
 		world.tick();
 #ifdef DEBUG

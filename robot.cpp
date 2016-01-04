@@ -35,9 +35,9 @@ void Robot::move(Interface& actuatorInterface) {
 	double s_x = v_x(RANDOM_ENGINE)*TIME_PER_TICK;
 	double s_y = v_y(RANDOM_ENGINE)*TIME_PER_TICK;
 	double delOri=omega(RANDOM_ENGINE)*TIME_PER_TICK;
-
-	this->base.x+=s_x;
-	this->base.y+=s_y;
+	Vector s=Vector(&this->base,s_x,s_y).transform(this->base.getBase());
+	this->base.x+=s.x;
+	this->base.y+=s.y;
 	this->base.moveAxes(Vector(&this->base, std::cos(delOri), std::sin(delOri)));
 }
 

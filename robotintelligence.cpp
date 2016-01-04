@@ -216,9 +216,9 @@ void RobotIntelligence::calcEstimationErrors()
 
 void RobotIntelligence::move()
 {	//TODO do something thoughtfull, not turning in circles
-	motorData->setData("vx",0);
+	motorData->setData("vx",0.1);
 	motorData->setData("vy",0);
-	motorData->setData("omega",0);
+	motorData->setData("omega",0.1);
 }
 
 void RobotIntelligence::moveParticles(const double& timeStep)

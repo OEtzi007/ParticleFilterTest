@@ -50,7 +50,7 @@ Vector Vector::transform(const CoordinateSystem* const toSystem) const
 
 		return result.transform(toSystem);
 	} else {	//go up the transformation tree
-		const CoordinateSystem* const localToSystem=this->refBase->getBase();
+		//const CoordinateSystem* const localToSystem=this->refBase->getBase();
 #ifdef DEBUG
 		if(localToSystem==0){	//this actually shouldn't happen, so assert
 			assert(localToSystem==0);	//NOTE assert

@@ -20,8 +20,11 @@ RobotIntelligence::RobotIntelligence(Interfaces& interfaces):
 	timeData(&interfaces.timeI),
 	simulatedRobot(SimulatedTestRobot(&map,
 									  &map.base,
-									  Coordinate(&map.base)))
+									  Coordinate(&map.base))),
+	isRunning(false),
+	quit(false)
 {
+	motorData->setAllData({0.,0.,0.});
 }
 
 RobotIntelligence::~RobotIntelligence()
@@ -30,12 +33,11 @@ RobotIntelligence::~RobotIntelligence()
 
 void RobotIntelligence::run()
 {	//TODO move into one methode particleFilter
+	isRunning=true;
 	initParticles();
-	//TODO initMove();
-	move();
 	double lastTime = timeData->getData("time");
 	//TODO laserDatafrequence
-	while(true) {
+	while(isRunning) {
 		evalSensors();
 
 		estimatePosition();	//NOTE estimation need to be done after evalSensors and before resampling
@@ -47,6 +49,10 @@ void RobotIntelligence::run()
 		double timeStep = curTime-lastTime;
 		lastTime = curTime;
 		moveParticles(timeStep);
+		if(quit){
+			isRunning=false;
+			quit=false;
+		}
 	}
 }
 

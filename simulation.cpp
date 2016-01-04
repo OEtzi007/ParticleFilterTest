@@ -33,9 +33,11 @@ void Simulation::run()
 		*/
 #endif
 		++ticks;
+		emit itTicked(ticks);
 	}
 
-	ai.quit();
+	ai.quit=true;
+	ai.wait();
 }
 
 void Simulation::initProcess()

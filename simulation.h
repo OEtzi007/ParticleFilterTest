@@ -8,6 +8,7 @@
 
 class Simulation : public QThread
 {
+	Q_OBJECT
 private:
 	Interfaces ifs;
 	World world;
@@ -20,6 +21,9 @@ public:
 	void run() Q_DECL_OVERRIDE ;
 
 	void initProcess();
+
+signals:
+	void itTicked(int tick);
 };
 
 #endif // SIMULATION_H

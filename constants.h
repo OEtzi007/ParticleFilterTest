@@ -31,7 +31,7 @@ const std::string LASER_CONFIG_FILE="2D_12.lcfg";
 
 //SIMULATION
 const double TIME_PER_TICK = 0.0001;
-const unsigned int TOTAL_TICKS = 1000000;
+const unsigned int TOTAL_TICKS = 100000;
 
 //LASER
 const double LASER_RANGE=5.;

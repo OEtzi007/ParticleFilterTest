@@ -36,16 +36,16 @@ void RobotIntelligence::run()
 	double lastTime = timeData->getData("time");
 	//TODO laserDatafrequence
 	while(true) {
-		estimatePosition();
+		evalSensors();
+
+		estimatePosition();	//NOTE estimation need to be done after evalSensors and before resampling
 		move();
 
-		evalSensors();
 		resampling();
 
 		double curTime=timeData->getData("time");
 		double timeStep = curTime-lastTime;
 		lastTime = curTime;
-
 		moveParticles(timeStep);
 	}
 }
@@ -128,6 +128,10 @@ void RobotIntelligence::estimatePosition()
 				 ":\tx=" << estimatedPosition.x << "+-" << estimationError.x <<
 				 "\ty=" << estimatedPosition.y << "+-" << estimationError.y <<
 				 "\tori=" << estimatedPosition.phi << "+-" << estimationError.phi << std::endl;
+	std::cout << "Robot thinks at time " << timeData->getData("time") <<
+				 ":\tx=" << estimatedPosition.x << "+-" << .5/particleDensityAtEstimatedPosition.x <<
+				 "\ty=" << estimatedPosition.y << "+-" << .5/particleDensityAtEstimatedPosition.y <<
+				 "\tori=" << estimatedPosition.phi << "+-" << .5/particleDensityAtEstimatedPosition.phi << std::endl;
 #endif
 }
 
@@ -176,18 +180,18 @@ void RobotIntelligence::calcEstimationErrors()
 	estimationError.weight=1;	//NOTE not relevant
 
 	//TODO calc best particle density in extra methode
-	int numberTestParticles=sqrt(NUM_PARTICLES);
+	int numberTestParticles=sqrt(NUM_PARTICLES)+1;
 	std::vector<double> distances;
 	//x
 	for(unsigned int i=0;i<NUM_PARTICLES;i++){
-		distances.push_back(abs(estimatedPosition.x-particles[i].x));
+		distances.push_back(std::abs(estimatedPosition.x-particles[i].x));
 	}
 	std::sort(distances.begin(),distances.end());
 	double xRadius=0.5*(distances[numberTestParticles-1]+distances[numberTestParticles]);
 	//y
 	distances.clear();
 	for(unsigned int i=0;i<NUM_PARTICLES;i++){
-		distances.push_back(abs(estimatedPosition.y-particles[i].y));
+		distances.push_back(std::abs(estimatedPosition.y-particles[i].y));
 	}
 	std::sort(distances.begin(),distances.end());
 	double yRadius=0.5*(distances[numberTestParticles-1]+distances[numberTestParticles]);
@@ -199,7 +203,7 @@ void RobotIntelligence::calcEstimationErrors()
 			cur_phi_err-=2*PI;
 		while(cur_phi_err<-PI)
 			cur_phi_err+=2*PI;
-		distances.push_back(abs(cur_phi_err));
+		distances.push_back(std::abs(cur_phi_err));
 	}
 	std::sort(distances.begin(),distances.end());
 	double phiRadius=0.5*(distances[numberTestParticles-1]+distances[numberTestParticles]);

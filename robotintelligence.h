@@ -31,6 +31,7 @@ private:
 	std::vector<Particle> particles;
 	Particle estimatedPosition;
 	Particle estimationError;
+	Particle particleDensityAtEstimatedPosition;
 	SimulatedTestRobot simulatedRobot;
 
 	void run() Q_DECL_OVERRIDE ;

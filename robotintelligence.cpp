@@ -36,11 +36,11 @@ void RobotIntelligence::run()
 	double lastTime = timeData->getData("time");
 	//TODO laserDatafrequence
 	while(true) {
-		evalSensors();
-		resampling();
-
 		estimatePosition();
 		move();
+
+		evalSensors();
+		resampling();
 
 		double curTime=timeData->getData("time");
 		double timeStep = curTime-lastTime;
@@ -49,6 +49,7 @@ void RobotIntelligence::run()
 		moveParticles(timeStep);
 	}
 }
+
 #include <iostream>	//TODO remove
 void RobotIntelligence::evalSensors()
 {
@@ -173,6 +174,40 @@ void RobotIntelligence::calcEstimationErrors()
 	estimationError.y=std::sqrt(y_sigma_squared);
 	estimationError.phi=std::sqrt(phi_sigma_squared);
 	estimationError.weight=1;	//NOTE not relevant
+
+	//TODO calc best particle density in extra methode
+	int numberTestParticles=sqrt(NUM_PARTICLES);
+	std::vector<double> distances;
+	//x
+	for(unsigned int i=0;i<NUM_PARTICLES;i++){
+		distances.push_back(abs(estimatedPosition.x-particles[i].x));
+	}
+	std::sort(distances.begin(),distances.end());
+	double xRadius=0.5*(distances[numberTestParticles-1]+distances[numberTestParticles]);
+	//y
+	distances.clear();
+	for(unsigned int i=0;i<NUM_PARTICLES;i++){
+		distances.push_back(abs(estimatedPosition.y-particles[i].y));
+	}
+	std::sort(distances.begin(),distances.end());
+	double yRadius=0.5*(distances[numberTestParticles-1]+distances[numberTestParticles]);
+	//phi
+	distances.clear();
+	for(unsigned int i=0;i<NUM_PARTICLES;i++){
+		double cur_phi_err=estimatedPosition.phi-particles[i].phi;
+		while(cur_phi_err>=PI)
+			cur_phi_err-=2*PI;
+		while(cur_phi_err<-PI)
+			cur_phi_err+=2*PI;
+		distances.push_back(abs(cur_phi_err));
+	}
+	std::sort(distances.begin(),distances.end());
+	double phiRadius=0.5*(distances[numberTestParticles-1]+distances[numberTestParticles]);
+
+	particleDensityAtEstimatedPosition.x=0.5*numberTestParticles/xRadius;
+	particleDensityAtEstimatedPosition.y=0.5*numberTestParticles/yRadius;
+	particleDensityAtEstimatedPosition.phi=0.5*numberTestParticles/phiRadius;
+	particleDensityAtEstimatedPosition.weight=1;	//NOTE not relevant
 }
 
 void RobotIntelligence::move()
@@ -200,11 +235,11 @@ void RobotIntelligence::moveParticles(const double& timeStep)
 		curParticle.phi+=omega(RANDOM_ENGINE)*timeStep;
 
 		//add random error so that particles are diverse even if there is no movement
-		double q=100.;	//TODO change	//NOTE with correct error estimation q should be 1.
+		double q=1.;	//TODO change	//NOTE with correct error estimation q should be 1.
 										//check for different particles, 999 A and 1 B particle doesn't mean, we know that we are at point A, but that there are missing particles inbetween the space of A and B, so derive error formula maybe with a two dimensional gaussian
-		double xerr=estimationError.x*q;
-		double yerr=estimationError.y*q;
-		double phierr=estimationError.phi*q;
+		double xerr=0.5/particleDensityAtEstimatedPosition.x*q;
+		double yerr=0.5/particleDensityAtEstimatedPosition.y*q;
+		double phierr=0.5/particleDensityAtEstimatedPosition.phi*q;
 
 		//TODO if we count somewhere else different particles, this isn't necessary anymore
 		//TODO maybe better use initParticles

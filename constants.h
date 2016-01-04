@@ -27,7 +27,6 @@ const double MAP_HEIGHT=5;
 
 //ROBOT
 const double ROBOT_RADIUS=0.15;
-//const std::string LASER_CONFIG_FILE="/Users/David/Documents/Studentenleben Aachen/Hacken und Coden/ParticleFilterTest/2D_12.lcfg";
 const std::string LASER_CONFIG_FILE="2D_12.lcfg";
 
 //SIMULATION

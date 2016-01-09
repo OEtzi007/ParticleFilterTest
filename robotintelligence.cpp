@@ -15,6 +15,8 @@
 #include "motoractuator.h"
 
 RobotIntelligence::RobotIntelligence(Interfaces& interfaces):
+	currentStateRunning(false),
+	shutDownFlag(false),
 	laserData(&interfaces.laserSensorI),
 	motorData(&interfaces.motorActuatorI),
 	timeData(&interfaces.timeI),
@@ -29,13 +31,15 @@ RobotIntelligence::~RobotIntelligence()
 }
 
 void RobotIntelligence::run()
-{	//TODO move into one methode particleFilter
+{
+	currentStateRunning=true;
+	//TODO move into one methode particleFilter
 	initParticles();
 	//TODO initMove();
 	move();
 	double lastTime = timeData->getData("time");
 	//TODO laserDatafrequence
-	while(true) {
+	while(!shutDownFlag) {
 		evalSensors();
 
 		estimatePosition();	//NOTE estimation need to be done after evalSensors and before resampling
@@ -48,6 +52,8 @@ void RobotIntelligence::run()
 		lastTime = curTime;
 		moveParticles(timeStep);
 	}
+	currentStateRunning=false;
+	shutDownFlag=false;
 }
 
 #include <iostream>	//TODO remove
@@ -80,11 +86,11 @@ void RobotIntelligence::evalSensors()
 		weights.push_back(particles[i].weight);
 	}
 	/*
-	std::sort(weights.rbegin(),weights.rend());	//TODO remove
+	std::sort(weights.rbegin(),weights.rend());	//NOTE io section
 	for(unsigned int i=0;i<NUM_PARTICLES;++i){
-		std::cout << weights[i] << "\t";	//TODO remove
+		std::cout << weights[i] << "\t";
 	}
-	std::cout << std::endl;	//TODO remove
+	std::cout << std::endl;
 	*/
 }
 
@@ -291,13 +297,14 @@ double RobotIntelligence::random(const double& lower_bound, const double& upper_
 
 double RobotIntelligence::log_gaussian(const double& x, const double& mean, const double& sigma) const
 {
+	/*
 #ifdef DEBUG
 	assert(sigma != 0);	//NOTE assert
 #endif
-	/*
-	if(sigma == 0)
-		return x==mean ? 1 : 0;
 	*/
+	if(sigma == 0)	//FIXME is this really necessary
+		return x==mean ? std::numeric_limits<double>::max() : -std::numeric_limits<double>::max();
+
 	double expNumerator = -(x-mean)*(x-mean);
 	double expDenominator = 2*sigma*sigma;
 	double log_gauss=expNumerator/expDenominator-std::log(sigma*sigma*2*PI)/2;
@@ -309,4 +316,14 @@ void RobotIntelligence::reset(Interfaces& interfaces)
 	laserData=&interfaces.laserSensorI;
 	motorData=&interfaces.motorActuatorI;
 	timeData=&interfaces.timeI;
+}
+
+void RobotIntelligence::shutDown()
+{
+	shutDownFlag=true;
+}
+
+void RobotIntelligence::operator()()
+{
+	run();
 }

@@ -17,7 +17,7 @@ LaserSensor::LaserSensor(World* const world, const CoordinateSystem* const refBa
 							origin,
 							direction))
 {
-
+	//FIXME lastTimeMeasurement and lastMeasurement needed to be set correctly and also must be able to reset if simulation gets resetted
 }
 
 double LaserSensor::getMeasurement()

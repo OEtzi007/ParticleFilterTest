@@ -1,5 +1,7 @@
 #include "simulation.h"
 
+#include <thread>
+
 #ifdef DEBUG
 #include <iostream>	//NOTE io
 #endif
@@ -18,7 +20,7 @@ void Simulation::run()
 {
 	initProcess();
 
-	ai.start();
+	std::thread aiThread{ai};
 
 	while(ticks<TOTAL_TICKS)	//TODO add a finish line
 	{
@@ -35,12 +37,16 @@ void Simulation::run()
 		++ticks;
 	}
 
-	ai.quit();
+	ai.shutDown();
+	aiThread.join();
 }
 
 void Simulation::initProcess()
 {
 	ticks=0;
+	ifs.timeI.setData("time",0);
+	ifs.motorActuatorI.setAllData(std::vector<double>(3,0));
+	ifs.laserSensorI.setAllData(std::vector<double>(12,1));
 	world.reset(ifs);
 	ai.reset(ifs);
 }

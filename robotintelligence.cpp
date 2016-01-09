@@ -22,8 +22,11 @@ RobotIntelligence::RobotIntelligence(Interfaces& interfaces):
 	timeData(&interfaces.timeI),
 	simulatedRobot(SimulatedTestRobot(&map,
 									  &map.base,
-									  Coordinate(&map.base)))
+									  Coordinate(&map.base))),
+	isRunning(false),
+	quit(false)
 {
+	motorData->setAllData({0.,0.,0.});
 }
 
 RobotIntelligence::~RobotIntelligence()
@@ -35,8 +38,6 @@ void RobotIntelligence::run()
 	currentStateRunning=true;
 	//TODO move into one methode particleFilter
 	initParticles();
-	//TODO initMove();
-	move();
 	double lastTime = timeData->getData("time");
 	//TODO laserDatafrequence
 	while(!shutDownFlag) {
@@ -51,6 +52,10 @@ void RobotIntelligence::run()
 		double timeStep = curTime-lastTime;
 		lastTime = curTime;
 		moveParticles(timeStep);
+		if(quit){
+			isRunning=false;
+			quit=false;
+		}
 	}
 	currentStateRunning=false;
 	shutDownFlag=false;

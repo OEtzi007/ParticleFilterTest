@@ -35,6 +35,7 @@ void Simulation::run()
 		*/
 #endif
 		++ticks;
+		emit itTicked(ticks);
 	}
 
 	ai.shutDown();

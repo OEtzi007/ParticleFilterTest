@@ -6,6 +6,7 @@
 
 class Simulation
 {
+	Q_OBJECT
 private:
 	Interfaces ifs;
 	World world;
@@ -18,6 +19,9 @@ public:
 	void run();
 
 	void initProcess();
+
+signals:
+	void itTicked(int tick);
 };
 
 #endif // SIMULATION_H

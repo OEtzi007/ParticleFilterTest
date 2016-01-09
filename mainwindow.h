@@ -15,6 +15,10 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
+private slots:
+	void on_runSimulation_button_clicked();
+	void setLCDandProgress(int tick);
+
 private:
 	Ui::MainWindow *ui;
 };

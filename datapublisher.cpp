@@ -10,11 +10,13 @@ DataPublisher::DataPublisher(MainWindow* const subscriber):
 
 void DataPublisher::setTicks(unsigned long long ticks)
 {
+	objectMutex.lock();
 	this->ticks=ticks;
 	this->publishTicks();
+	objectMutex.unlock();
 }
 
-void DataPublisher::publishTicks() const
+void DataPublisher::publishTicks()
 {
 	subscriber->setLCDandProgress(ticks);
 }

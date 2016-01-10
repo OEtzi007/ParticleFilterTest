@@ -1,12 +1,14 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
+#include "thread.h"
+
 #include "world.h"
 #include "robotintelligence.h"
 
 class DataPublisher;
 
-class Simulation
+class Simulation : public Thread
 {
 private:
 	DataPublisher* subscriber;

@@ -1,11 +1,15 @@
 #ifndef DATAPUBLISHER_H
 #define DATAPUBLISHER_H
 
+#include <thread>
+
 class MainWindow;
 
 class DataPublisher
 {
 private:
+	std::mutex objectMutex;
+
 	unsigned long long int ticks;
 
 	MainWindow* subscriber;
@@ -16,7 +20,7 @@ public:
 	void setTicks(unsigned long long int ticks);
 
 	//publisher functions
-	void publishTicks() const;
+	void publishTicks();
 };
 
 #endif // DATAPUBLISHER_H

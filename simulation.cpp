@@ -8,6 +8,7 @@
 #endif
 
 Simulation::Simulation(DataPublisher* const subscriber):
+	Thread(),
 	subscriber(subscriber),
 	ifs{Interface(12,std::vector<std::string>(12,"laserSensor")),
 		Interface(3,{"vx","vy","omega"}),
@@ -20,11 +21,13 @@ Simulation::Simulation(DataPublisher* const subscriber):
 
 void Simulation::run()
 {
+	isRunning=true;
+
 	initProcess();
 
-	std::thread aiThread(ai);
+	std::thread aiThread(&RobotIntelligence::run,&ai);
 
-	while(ticks<TOTAL_TICKS)	//TODO add a finish line
+	while(ticks<TOTAL_TICKS && !shutDownFlag)	//TODO add a finish line
 	{
 		world.tick();
 #ifdef DEBUG
@@ -44,6 +47,9 @@ void Simulation::run()
 
 	ai.shutDown();
 	aiThread.join();
+
+	shutDownFlag=false;
+	isRunning=false;
 }
 
 void Simulation::initProcess()

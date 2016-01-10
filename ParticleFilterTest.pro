@@ -30,7 +30,8 @@ SOURCES	+= main.cpp\
 	simulatedtestrobot.cpp \
     motoractuator.cpp \
     constants.cpp \
-    datapublisher.cpp
+    datapublisher.cpp \
+    thread.cpp
 
 HEADERS	+= mainwindow.h \
 	constants.h \
@@ -50,7 +51,8 @@ HEADERS	+= mainwindow.h \
 	simulation.h \
 	simulatedtestrobot.h \
     motoractuator.h \
-    datapublisher.h
+    datapublisher.h \
+    thread.h
 
 FORMS	+= mainwindow.ui
 

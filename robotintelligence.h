@@ -8,6 +8,8 @@
 #ifndef ROBOTINTELLIGENCE_H_
 #define ROBOTINTELLIGENCE_H_
 
+#include "thread.h"
+
 #include <vector>
 
 #include "interface.h"
@@ -20,10 +22,8 @@ struct Particle{
 	double weight;
 };
 
-class RobotIntelligence{
+class RobotIntelligence : public Thread{
 private:
-	bool currentStateRunning;
-	bool shutDownFlag;
 
 	Interface* laserData;
 	Interface* motorData;
@@ -47,17 +47,12 @@ private:
 	double random(const double& lower_bound, const double& upper_bound) const;
 	double log_gaussian(const double& x, const double& mean, const double& sigma) const;
 public:
-	bool isRunning;
-	bool quit;
 
 	RobotIntelligence(Interfaces& interfaces);
 	virtual ~RobotIntelligence();
 
 	void run();
 	void reset(Interfaces& interfaces);
-	void shutDown();
-
-	void operator()();
 };
 
 #endif /* ROBOTINTELLIGENCE_H_ */

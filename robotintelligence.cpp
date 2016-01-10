@@ -15,16 +15,12 @@
 #include "motoractuator.h"
 
 RobotIntelligence::RobotIntelligence(Interfaces& interfaces):
-	currentStateRunning(false),
-	shutDownFlag(false),
 	laserData(&interfaces.laserSensorI),
 	motorData(&interfaces.motorActuatorI),
 	timeData(&interfaces.timeI),
 	simulatedRobot(SimulatedTestRobot(&map,
 									  &map.base,
-									  Coordinate(&map.base))),
-	isRunning(false),
-	quit(false)
+									  Coordinate(&map.base)))
 {
 	motorData->setAllData({0.,0.,0.});
 }
@@ -35,7 +31,7 @@ RobotIntelligence::~RobotIntelligence()
 
 void RobotIntelligence::run()
 {
-	currentStateRunning=true;
+	isRunning=true;
 	//TODO move into one methode particleFilter
 	initParticles();
 	double lastTime = timeData->getData("time");
@@ -52,13 +48,9 @@ void RobotIntelligence::run()
 		double timeStep = curTime-lastTime;
 		lastTime = curTime;
 		moveParticles(timeStep);
-		if(quit){
-			isRunning=false;
-			quit=false;
-		}
 	}
-	currentStateRunning=false;
 	shutDownFlag=false;
+	isRunning=false;
 }
 
 #include <iostream>	//TODO remove
@@ -321,14 +313,4 @@ void RobotIntelligence::reset(Interfaces& interfaces)
 	laserData=&interfaces.laserSensorI;
 	motorData=&interfaces.motorActuatorI;
 	timeData=&interfaces.timeI;
-}
-
-void RobotIntelligence::shutDown()
-{
-	shutDownFlag=true;
-}
-
-void RobotIntelligence::operator()()
-{
-	run();
 }

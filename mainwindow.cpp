@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <thread>
 #include "simulation.h"
 #include "datapublisher.h"
 
@@ -13,14 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+	stopSimulation();
 	delete ui;
 }
 
 void MainWindow::on_runSimulation_button_clicked()
 {
-	DataPublisher simulation(this);
-	Simulation sim(&simulation);
-	sim.run();
+	startSimulation();
 }
 
 void MainWindow::setLCDandProgress(int ticks)
@@ -30,4 +30,17 @@ void MainWindow::setLCDandProgress(int ticks)
 	ui->lcdNumber->display(ticks);
 	this->updatesEnabled();
 	this->update();
+}
+
+void MainWindow::startSimulation()
+{
+	simulationPublisher=new DataPublisher(this);
+	simulation=new Simulation(simulationPublisher);
+	simulationThread=new std::thread(&Simulation::run,simulation);
+}
+
+void MainWindow::stopSimulation()
+{
+	simulation->shutDown();
+	simulationThread->join();
 }

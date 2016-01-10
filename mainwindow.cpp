@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "simulation.h"
+#include "datapublisher.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -17,20 +18,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_runSimulation_button_clicked()
 {
-	Simulation sim;
-	connect(&sim,
-			SIGNAL(itTicked(int)),
-			this,
-			SLOT(setLCDandProgress(int)),
-			Qt::BlockingQueuedConnection);
-	sim.start();
-	sim.wait();
+	DataPublisher simulation(this);
+	Simulation sim(&simulation);
+	sim.run();
 }
 
-void MainWindow::setLCDandProgress(int tick)
+void MainWindow::setLCDandProgress(int ticks)
 {
 	ui->progressBar->setMaximum(TOTAL_TICKS);
-	ui->progressBar->setValue(tick);
-	ui->lcdNumber->display((int)tick);
-	this->show();
+	ui->progressBar->setValue(ticks);
+	ui->lcdNumber->display(ticks);
+	this->updatesEnabled();
+	this->update();
 }

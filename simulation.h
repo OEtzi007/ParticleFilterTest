@@ -4,24 +4,24 @@
 #include "world.h"
 #include "robotintelligence.h"
 
+class DataPublisher;
+
 class Simulation
 {
-	Q_OBJECT
 private:
+	DataPublisher* subscriber;
+
 	Interfaces ifs;
 	World world;
 	RobotIntelligence ai;
 
 	unsigned long long int ticks;
 public:
-	Simulation();
+	Simulation(DataPublisher* const subscriber);
 
 	void run();
 
 	void initProcess();
-
-signals:
-	void itTicked(int tick);
 };
 
 #endif // SIMULATION_H

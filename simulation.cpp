@@ -1,12 +1,14 @@
 #include "simulation.h"
 
 #include <thread>
+#include "datapublisher.h"
 
 #ifdef DEBUG
 #include <iostream>	//NOTE io
 #endif
 
-Simulation::Simulation():
+Simulation::Simulation(DataPublisher* const subscriber):
+	subscriber(subscriber),
 	ifs{Interface(12,std::vector<std::string>(12,"laserSensor")),
 		Interface(3,{"vx","vy","omega"}),
 		Interface(1,{"time"})},
@@ -20,7 +22,7 @@ void Simulation::run()
 {
 	initProcess();
 
-	std::thread aiThread{ai};
+	std::thread aiThread(ai);
 
 	while(ticks<TOTAL_TICKS)	//TODO add a finish line
 	{
@@ -35,7 +37,9 @@ void Simulation::run()
 		*/
 #endif
 		++ticks;
-		emit itTicked(ticks);
+		//TODO publish data to gui
+		//NOTE maybe we could do it like the following
+		subscriber->setTicks(ticks);
 	}
 
 	ai.shutDown();

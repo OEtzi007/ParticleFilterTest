@@ -1,12 +1,10 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-#include <QThread>
-
 #include "world.h"
 #include "robotintelligence.h"
 
-class Simulation : public QThread
+class Simulation
 {
 private:
 	Interfaces ifs;
@@ -17,7 +15,7 @@ private:
 public:
 	Simulation();
 
-	void run() Q_DECL_OVERRIDE ;
+	void run();
 
 	void initProcess();
 };

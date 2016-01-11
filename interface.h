@@ -1,7 +1,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include <QMutex>
+#include <mutex>
 #include <vector>
 #include <unordered_map>
 #include <string>
@@ -9,7 +9,7 @@
 class Interface
 {
 private:
-	QMutex dataLocker;
+	std::mutex dataLocker;
 	std::vector<double> data;
 	std::unordered_map<std::string,unsigned int> mappedNames;
 public:

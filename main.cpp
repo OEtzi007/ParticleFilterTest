@@ -3,7 +3,7 @@
 
 #include "simulation.h"
 
-int main(/*int argc, char *argv[]*/)
+int main(int argc, char *argv[])
 {
 	/*
 	QApplication a(argc, argv);
@@ -11,8 +11,7 @@ int main(/*int argc, char *argv[]*/)
 	w.show();
 	*/
 	Simulation sim;
-	sim.start();
-	sim.wait();
+	sim.run();
 
 	//return a.exec();
 	return 0;

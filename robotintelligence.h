@@ -8,7 +8,6 @@
 #ifndef ROBOTINTELLIGENCE_H_
 #define ROBOTINTELLIGENCE_H_
 
-#include <QThread>
 #include <vector>
 
 #include "interface.h"
@@ -21,8 +20,11 @@ struct Particle{
 	double weight;
 };
 
-class RobotIntelligence : public QThread {
+class RobotIntelligence{
 private:
+	bool currentStateRunning;
+	bool shutDownFlag;
+
 	Interface* laserData;
 	Interface* motorData;
 	Interface* timeData;
@@ -34,7 +36,6 @@ private:
 	Particle particleDensityAtEstimatedPosition;
 	SimulatedTestRobot simulatedRobot;
 
-	void run() Q_DECL_OVERRIDE ;
 	void initParticles();
 	std::vector<double> readSensors();
 	void evalSensors();
@@ -48,7 +49,12 @@ private:
 public:
 	RobotIntelligence(Interfaces& interfaces);
 	virtual ~RobotIntelligence();
+
+	void run();
 	void reset(Interfaces& interfaces);
+	void shutDown();
+
+	void operator()();
 };
 
 #endif /* ROBOTINTELLIGENCE_H_ */

@@ -7,6 +7,7 @@
 
 #include "robotintelligence.h"
 
+#include <algorithm>
 #include <random>
 #include <cassert>
 #include <limits>
